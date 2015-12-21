@@ -121,7 +121,7 @@ class Generator
     {
         return $this->tabs($quote . $value . $quote, $tabs);
     }
-S
+
     /**
      * Add array values definition.
      *
