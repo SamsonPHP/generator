@@ -110,6 +110,21 @@ class Generator
     }
 
     /**
+     * Add one line variable definition comment.
+     *
+     * @param string $type Variable type
+     * @param string $description Variable description
+     * @param string $name Variable name
+     * @return self Chaining
+     */
+    public function commentVar($type, $description, $name = '')
+    {
+        return $this->multiComment(array(
+            '@var ' . trim($type) . (isset($name) ? trim($name) . ' ' : ' ') . trim($description)
+        ));
+    }
+
+    /**
      * Add string value definition.
      *
      * @param string $value String value to add
@@ -267,11 +282,10 @@ class Generator
      *
      * @param string $name Variable name
      * @param string $visibility Variable accessibility level
-     * @param string|null $comment Variable description
      * @param string $value Variable default value
      * @return self Chaining
      */
-    public function defClassVar($name, $visibility = 'public', $comment = null, $value = null)
+    public function defClassVar($name, $visibility = 'public', $value = null)
     {
         if (isset($comment) && isset($comment{0})) {
             $this->multiComment(array($comment));
@@ -285,12 +299,11 @@ class Generator
      *
      * @param string $name Constant name
      * @param string $value Variable default value
-     * @param string|null $comment Variable description
      * @return self Chaining
      */
-    public function defClassConst($name, $value, $comment = null)
+    public function defClassConst($name, $value)
     {
-        return $this->defClassVar(strtoupper($name), 'const', $comment, $value);
+        return $this->defClassVar(strtoupper($name), 'const', $value);
     }
 
     /**
