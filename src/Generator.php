@@ -254,14 +254,12 @@ S
      */
     public function endClass()
     {
-        // Close class definition
-        $this->newLine('}')
-            // Add one empty line after class definition
-        ->newLine('');
-
         $this->tabs--;
 
-        return $this;
+        // Close class definition
+        return $this->newLine('}')
+            // Add one empty line after class definition
+        ->newLine('');
     }
 
     /**
@@ -354,11 +352,14 @@ S
     }
 
     /**
-     * Close current function context
-     * @return\samson\activerecord\Generator
+     * Close current function context.
+     *
+     * @return self Chaining
      */
-    public function endfunction()
+    public function endFunction()
     {
+        $this->tabs--;
+
         return $this->newLine('}')->newLine('');
     }
 
