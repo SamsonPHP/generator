@@ -4,7 +4,6 @@ namespace samsonphp\generator;
 
 class Generator
 {
-
     /** Single quote for string value **/
     const QUOTE_SINGLE = "'";
 
@@ -132,30 +131,16 @@ class Generator
         $this->text('array(');
         $this->tabs++;
 
-        /*
-        // TODO: Add array key-value выравнивание
-         *
-        // Determine largest key
-        // Convert array to array of key lengths
-        $lengths = array_map('strlen', array_keys($items));
-        // Get lergest element
-        $maxLength = max( $lengths );
-        // Find largest position
-        $key = array_search( $maxLength, $lengths );        
-        $tab_size = 3;
-        $tabs = round($maxLength / $tab_size);
-        */
-
         // Iterate array items
         foreach ($items as $key => $value) {
             // Start array key definition
-            $this->newline()->stringvalue($key, 2)->tabs('=>', 1);
+            $this->newline()->stringvalue($key)->text(' => ');
 
             // If item value is array - recursion
             if (is_array($value)) {
                 $this->arrayvalue($value)->text(',');
             } else {
-                $this->stringvalue($value, 1)->text(',');
+                $this->stringvalue($value)->text(',');
             }
         }
 
