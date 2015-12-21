@@ -4,6 +4,13 @@ namespace samsonphp\generator;
 
 class Generator
 {
+
+	/** Single quote for string value **/
+	const QUOTE_SINGLE = "'";
+	
+	/** Double quote for string value **/
+	const QUOTE_DOUBLE = '"';
+
 	/** Generated code */
 	public $code = '';
 
@@ -88,11 +95,12 @@ class Generator
 	 * Add string value definition
 	 * @param string $value String value to add
 	 * @param string $tabs Tabs count
+	 * @param string $quote Type of quote
 	 * @return self
 	 */
-	public function stringvalue($value, $tabs = null)
+	public function stringvalue($value, $tabs = null, $quote = self::QUOTE_SINGLE)
 	{
-		return $this->tabs('"' . $value . '"', $tabs);
+		return $this->tabs($quote . $value . $quote, $tabs);
 	}
 
 	/**
@@ -156,9 +164,10 @@ class Generator
 	 * @param string $name Variable name
 	 * @param string $value Variable default value
 	 * @param string $after String to insert after variable definition
+	 * @param string $quote Type of quote
 	 * @return self Chaining
 	 */
-	public function defvar($name, $value = null, $after = ' = ', $end = ';')
+	public function defvar($name, $value = null, $after = ' = ', $end = ';', $quote = self::QUOTE_SINGLE)
 	{
 		// Output variable definition
 		$this->newline($name);
@@ -173,7 +182,7 @@ class Generator
 				$this->text($after, 1)->text($value)->text($end);
 				break;
 			case 'string'    :
-				$this->text($after, 1)->stringvalue($value, 1)->text($end);
+				$this->text($after, 1)->stringvalue($value, 1, $quote)->text($end);
 				break;
 			case 'array'    :
 				$this->text($after, 1)->arrayvalue($value, 1)->text($end);
