@@ -105,9 +105,9 @@ class Generator
                 return $this->newline(" */");
             }
 
-        } else {
-            return $this;
         }
+
+        return $this;
     }
 
     /**
@@ -152,9 +152,11 @@ class Generator
             $this->newline()->stringvalue($key, 2)->tabs('=>', 1);
 
             // If item value is array - recursion
-            if (is_array($value)) $this->arrayvalue($value)->text(',');
-            // Output value
-            else $this->stringvalue($value, 1)->text(',');
+            if (is_array($value)) {
+                $this->arrayvalue($value)->text(',');
+            } else {
+                $this->stringvalue($value, 1)->text(',');
+            }
         }
 
         $this->newline(')');
@@ -195,8 +197,6 @@ class Generator
     {
         // Output variable definition
         $this->newline($name);
-
-        $t = gettype($value);
 
         // Get variable type
         switch (gettype($value)) {
@@ -317,7 +317,9 @@ class Generator
     {
         $code = $this->flush();
 
-        if ($format == 'php') $code = '<?php ' . $code;
+        if ($format === 'php') {
+            $code = '<?php ' . $code;
+        }
 
         file_put_contents($name, $code, 0775);
     }
@@ -367,7 +369,9 @@ class Generator
     public function __construct($namespace = null)
     {
         // If namespace is defined - set it
-        if (isset($namespace)) $this->defnamespace($namespace);
+        if (isset($namespace)) {
+            $this->defnamespace($namespace);
+        }
     }
 
     /**
@@ -379,6 +383,5 @@ class Generator
     {
         return $this->newline('namespace ' . $name . ';')->newline();
     }
-
 }
 //[PHPCOMPRESSOR(remove,end)]
