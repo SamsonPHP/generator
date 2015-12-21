@@ -146,8 +146,8 @@ class Generator
             }
         }
 
-        $this->newLine(')');
         $this->tabs--;
+        $this->newLine(')');
 
         return $this;
     }
