@@ -57,7 +57,7 @@ class Generator
      * @param integer $tabs Tabs count
      * @return self
      */
-    public function newline($text = '', $tabs = null)
+    public function newLine($text = '', $tabs = null)
     {
         // If no tabs count is specified set default tabs
         if (!isset($tabs)) {
@@ -74,7 +74,7 @@ class Generator
      */
     public function comment($text = '')
     {
-        return isset($text{0}) ? $this->newline("// " . $text) : $this;
+        return isset($text{0}) ? $this->newLine("// " . $text) : $this;
     }
 
     /**
@@ -85,11 +85,11 @@ class Generator
      * @param array $lines Array of comments lines
      * @return self Chaining
      */
-    public function multicomment(array $lines = array())
+    public function multiComment(array $lines = array())
     {
         // If array is not empty
         if (sizeof($lines)) {
-            $this->newline("/**");
+            $this->newLine("/**");
 
             // Multi-comment with single line
             if (sizeof($lines) === 1) {
@@ -97,11 +97,11 @@ class Generator
             } else { // Iterate comments lines and if comment line is not empty
                 foreach ($lines as $line) {
                     if (isset($line{0})) {
-                        $this->newline(" * " . $line);
+                        $this->newLine(" * " . $line);
                     }
                 }
 
-                return $this->newline(" */");
+                return $this->newLine(" */");
             }
 
         }
@@ -110,23 +110,25 @@ class Generator
     }
 
     /**
-     * Add string value definition
+     * Add string value definition.
+     *
      * @param string $value String value to add
      * @param string $tabs Tabs count
      * @param string $quote Type of quote
-     * @return self
+     * @return self Chaining
      */
-    public function stringvalue($value, $tabs = null, $quote = self::QUOTE_SINGLE)
+    public function stringValue($value, $tabs = null, $quote = self::QUOTE_SINGLE)
     {
         return $this->tabs($quote . $value . $quote, $tabs);
     }
-
+S
     /**
-     * Add array values definition
+     * Add array values definition.
+     *
      * @param array $items Array key-value pairs collection
      * @return self Chaining
      */
-    public function arrayvalue(array $items = array())
+    public function arrayValue(array $items = array())
     {
         $this->text('array(');
         $this->tabs++;
@@ -134,17 +136,17 @@ class Generator
         // Iterate array items
         foreach ($items as $key => $value) {
             // Start array key definition
-            $this->newline()->stringvalue($key)->text(' => ');
+            $this->newLine()->stringValue($key)->text(' => ');
 
             // If item value is array - recursion
             if (is_array($value)) {
-                $this->arrayvalue($value)->text(',');
+                $this->arrayValue($value)->text(',');
             } else {
-                $this->stringvalue($value)->text(',');
+                $this->stringValue($value)->text(',');
             }
         }
 
-        $this->newline(')');
+        $this->newLine(')');
         $this->tabs--;
 
         return $this;
@@ -158,7 +160,7 @@ class Generator
      * @param string $arrayName Name of array to merge to, if no is specified - $name is used
      * @return self Chaining
      */
-    public function defarraymerge($name, array $value, $arrayName = null)
+    public function defArrayMerge($name, array $value, $arrayName = null)
     {
         // If no other array is specified - set it to current
         if (!isset($arrayName)) {
@@ -181,7 +183,7 @@ class Generator
     public function defVar($name, $value = null, $after = ' = ', $end = ';', $quote = self::QUOTE_SINGLE)
     {
         // Output variable definition
-        $this->newline($name);
+        $this->newLine($name);
 
         // Get variable type
         switch (gettype($value)) {
@@ -191,10 +193,10 @@ class Generator
                 $this->text($after)->text($value)->text($end);
                 break;
             case 'string':
-                $this->text($after)->stringvalue($value, 0, $quote)->text($end);
+                $this->text($after)->stringValue($value, 0, $quote)->text($end);
                 break;
             case 'array':
-                $this->text($after)->arrayvalue($value)->text($end);
+                $this->text($after)->arrayValue($value)->text($end);
                 break;
             case 'NULL':
             case 'object':
@@ -219,14 +221,14 @@ class Generator
         // If we define another class, and we were in other class context
         if (isset($this->class) && ($name !== $this->class)) {
             // Close old class context
-            $this->endclass();
+            $this->endClass();
         }
 
         // Save new class name
         $this->class = $name;
 
         // Class definition start
-        $this->newline('class ' . $name);
+        $this->newLine('class ' . $name);
 
         // Parent class definition
         if (isset($extends)) {
@@ -238,7 +240,7 @@ class Generator
             $this->text(' implements ' . implode(',', $implements));
         }
 
-        $this->newline('{');
+        $this->newLine('{');
 
         $this->tabs++;
 
@@ -250,12 +252,12 @@ class Generator
      *
      * @return self Chaining
      */
-    public function endclass()
+    public function endClass()
     {
         // Close class definition
-        $this->newline('}')
+        $this->newLine('}')
             // Add one empty line after class definition
-        ->newline('');
+        ->newLine('');
 
         $this->tabs--;
 
@@ -274,10 +276,10 @@ class Generator
     public function defClassVar($name, $visibility = 'public', $comment = null, $value = null)
     {
         if (isset($comment) && isset($comment{0})) {
-            $this->multicomment(array($comment));
+            $this->multiComment(array($comment));
         }
 
-        return $this->defvar($visibility . ' ' . $name, $value)->newline();
+        return $this->defvar($visibility . ' ' . $name, $value)->newLine();
     }
 
     /**
@@ -327,15 +329,28 @@ class Generator
     }
 
     /**
-     * Add function definition
+     * Add function definition.
+     *
      * @param string $name Function name
-     * @return self Chaining
+     * @param array $parameters Collection of parameters $typeHint => $paramName
+     * @return Generator Chaining
      */
-    public function deffunction($name)
+    public function defFunction($name, $parameters = array())
     {
-        return $this->newline('function ' . $name . '()')
-            ->newline('{')
-            ->tabs('', 1);
+        // Convert parameters to string
+        $parameterList = array();
+        foreach ($parameters as $type => $name) {
+            $parameterList[] = (is_string($type) ? $type.' ' : '') . $name;
+        }
+        $parameterList = implode(', ', $parameterList);
+
+        $this->newLine('function ' . $name . '('.$parameterList.')')
+            ->newLine('{')
+            ->tabs('');
+
+        $this->tabs++;
+
+        return $this;
     }
 
     /**
@@ -344,7 +359,7 @@ class Generator
      */
     public function endfunction()
     {
-        return $this->newline('}')->newline('');
+        return $this->newLine('}')->newLine('');
     }
 
     /**
@@ -366,7 +381,7 @@ class Generator
      */
     private function defnamespace($name)
     {
-        return $this->newline('namespace ' . $name . ';')->newline();
+        return $this->newLine('namespace ' . $name . ';')->newLine();
     }
 }
 //[PHPCOMPRESSOR(remove,end)]
