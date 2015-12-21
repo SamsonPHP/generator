@@ -42,7 +42,7 @@ class Generator
     public function tabs($endText = '', $tabs = null, $startText = '')
     {
         // Generate tabs array
-        $tabs = isset($tabs) ? array_fill(0, $tabs, "\t") : array();
+        $tabs = isset($tabs) && $tabs ? array_fill(0, $tabs, "\t") : array();
 
         // Add necessary amount of tabs to line and append text
         $this->text($startText.implode('', $tabs) . $endText);
