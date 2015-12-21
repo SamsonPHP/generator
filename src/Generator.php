@@ -273,7 +273,7 @@ class Generator
      */
     public function defClassVar($name, $visibility = 'public', $comment = null, $value = null)
     {
-        if (isset($comment)) {
+        if (isset($comment) && isset($comment{0})) {
             $this->multicomment(array($comment));
         }
 
