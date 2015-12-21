@@ -5,10 +5,10 @@ namespace samsonphp\generator;
 class Generator
 {
 
-	/** Single quote for sting value **/
+	/** Single quote for string value **/
 	const QUOTE_SINGLE = "'";
 	
-	/** Double quote for sting value **/
+	/** Double quote for string value **/
 	const QUOTE_DOUBLE = '"';
 
 	/** Generated code */
