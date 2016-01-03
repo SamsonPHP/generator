@@ -19,6 +19,9 @@ class Generator
     /** @var string Current class name */
     public $class;
 
+    /** @var int Current conditions nesting level */
+    public $ifConditionLevel = 0;
+
     /**
      * Add simple text to current code position
      * @param string $text Text to add
@@ -275,6 +278,66 @@ class Generator
         return $this->newLine('}')
             // Add one empty line after class definition
         ->newLine('');
+    }
+
+    /**
+     * Define if statement condition.
+     *
+     * @param string $condition Condition statement
+     * @return self Chaining
+     */
+    public function defIfCondition($condition)
+    {
+        $this->ifConditionLevel++;
+
+        // Class definition start
+        $this->newLine('if (' . $condition . ') {');
+        $this->tabs++;
+        return $this;
+    }
+
+    /**
+     * Define elseif statement condition.
+     *
+     * @param string $condition Condition statement
+     * @return self Chaining
+     */
+    public function defElseIfCondition($condition)
+    {
+        $this->tabs--;
+        // Class definition start
+        $this->newLine('} elseif (' . $condition . ') {');
+        $this->tabs++;
+        return $this;
+    }
+
+    /**
+     * Define else statement.
+     *
+     * @return self Chaining
+     */
+    public function defElseCondition()
+    {
+        $this->tabs--;
+        // Class definition start
+        $this->newLine('} else {');
+        $this->tabs++;
+        return $this;
+    }
+
+    /**
+     * Close if condition statement.
+     *
+     * @return self Chaining
+     */
+    public function endIfCondition()
+    {
+        $this->tabs--;
+
+        $this->ifConditionLevel--;
+
+        // Close class definition
+        return $this->newLine('}');
     }
 
     /**
