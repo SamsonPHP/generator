@@ -148,24 +148,28 @@ class Generator
      */
     public function arrayValue(array $items = array())
     {
-        $this->text('array(');
-        $this->tabs++;
+        if (sizeof($items)) {
+            $this->text('array(');
+            $this->tabs++;
 
-        // Iterate array items
-        foreach ($items as $key => $value) {
-            // Start array key definition
-            $this->newLine()->stringValue($key)->text(' => ');
+            // Iterate array items
+            foreach ($items as $key => $value) {
+                // Start array key definition
+                $this->newLine()->stringValue($key)->text(' => ');
 
-            // If item value is array - recursion
-            if (is_array($value)) {
-                $this->arrayValue($value)->text(',');
-            } else {
-                $this->stringValue($value)->text(',');
+                // If item value is array - recursion
+                if (is_array($value)) {
+                    $this->arrayValue($value)->text(',');
+                } else {
+                    $this->stringValue($value)->text(',');
+                }
             }
-        }
 
-        $this->tabs--;
-        $this->newLine(')');
+            $this->tabs--;
+            $this->newLine(')');
+        } else {
+            $this->text('array()');
+        }
 
         return $this;
     }
