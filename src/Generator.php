@@ -413,10 +413,10 @@ class Generator
     {
         // Convert parameters to string
         $parameterList = array();
-        foreach ($parameters as $type => $name) {
-            $parameterList[] = (is_string($type) ? $type.' ' : '') . $name;
+        foreach ($parameters as $type => $parameter) {
+            $parameterList[] = (is_string($type) ? $type.' ' : '') . $parameter;
         }
-        $parameterList = implode(', ', $parameterList);
+        $parameterList = sizeof($parameterList) ? implode(', ', $parameterList) : '';
 
         $this->newLine('function ' . $name . '('.$parameterList.')')
             ->newLine('{')
