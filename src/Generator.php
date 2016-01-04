@@ -336,12 +336,14 @@ class Generator
      */
     public function endIfCondition()
     {
-        $this->tabs--;
+        if ($this->ifConditionLevel--) {
+            $this->tabs--;
 
-        $this->ifConditionLevel--;
+            // Close class definition
+            return $this->newLine('}');
+        }
 
-        // Close class definition
-        return $this->newLine('}');
+        return $this;
     }
 
     /**
