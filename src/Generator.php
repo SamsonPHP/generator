@@ -196,7 +196,7 @@ class Generator
      * Add variable definition.
      *
      * @param string $name Variable name
-     * @param string $value Variable default value
+     * @param mixed $value Variable default value
      * @param string $after String to insert after variable definition
      * @param string $end Closing part of variable definition
      * @param string $quote Type of quote
