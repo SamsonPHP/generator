@@ -351,7 +351,7 @@ class Generator
      *
      * @param string $name Variable name
      * @param string $visibility Variable accessibility level
-     * @param string $value Variable default value
+     * @param mixed $value Variable default value
      * @return self Chaining
      */
     public function defClassVar($name, $visibility = 'public', $value = null)
