@@ -462,7 +462,7 @@ class Generator
      * @param string $name Namespace name
      * @return self
      */
-    private function defnamespace($name)
+    public function defNamespace($name)
     {
         return $this->newLine('namespace ' . $name . ';')->newLine();
     }
