@@ -10,9 +10,6 @@ class Generator
     /** Double quote for string value **/
     const QUOTE_DOUBLE = '"';
 
-    /** No quote for string heredoc value **/
-    const QUOTE_NO = '';
-
     /** @var string Generated code */
     public $code = '';
 
@@ -218,11 +215,7 @@ class Generator
                 $this->text($after)->text($value)->text($end);
                 break;
             case 'string':
-                if (strpos($value, 'EOT') !== false) {
-                    $this->text($after)->stringValue($value, 0, self::QUOTE_NO)->text($end);
-                } else {
-                    $this->text($after)->stringValue($value, 0, $quote)->text($end);
-                }
+                $this->text($after)->stringValue($value, 0, $quote)->text($end);
                 break;
             case 'array':
                 $this->text($after)->arrayValue($value)->text($end);
@@ -253,6 +246,9 @@ class Generator
 
         // Save new class name
         $this->class = $name;
+
+        // Class definition start
+        $this->newLine('trait ' . $name);
 
         $this->newLine('{');
 
@@ -382,7 +378,7 @@ class Generator
      *
      * @param string $name Variable name
      * @param string $visibility Variable accessibility level
-     * @param mixed $value Variable default value
+     * @param string $value Variable default value
      * @return self Chaining
      */
     public function defClassVar($name, $visibility = 'public', $value = null)
@@ -493,7 +489,7 @@ class Generator
      * @param string $name Namespace name
      * @return self
      */
-    public function defNamespace($name)
+    private function defnamespace($name)
     {
         return $this->newLine('namespace ' . $name . ';')->newLine();
     }
