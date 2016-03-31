@@ -231,6 +231,30 @@ class Generator
     }
 
     /**
+     * Add trait definition.
+     *
+     * @param string $name Trait name
+     * @return self Chaining
+     */
+    public function defTrait($name)
+    {
+        // If we define another class, and we were in other class context
+        if (isset($this->class) && ($name !== $this->class)) {
+            // Close old class context
+            $this->endClass();
+        }
+
+        // Save new class name
+        $this->class = $name;
+
+        $this->newLine('{');
+
+        $this->tabs++;
+
+        return $this;
+    }
+
+    /**
      * Add class definition.
      *
      * @param string $name Class name
