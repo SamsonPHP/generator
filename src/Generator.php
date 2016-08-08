@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 //[PHPCOMPRESSOR(remove,start)]
 namespace samsonphp\generator;
 
@@ -49,7 +49,7 @@ class Generator
     public function tabs($endText = '', $tabs = null, $startText = '')
     {
         // Generate tabs array
-        $tabs = isset($tabs) && $tabs ? array_fill(0, $tabs, "\t") : array();
+        $tabs = isset($tabs) && $tabs > 0 ? array_fill(0, $tabs, "\t") : array();
 
         // Add necessary amount of tabs to line and append text
         $this->text($startText.implode('', $tabs) . $endText);
@@ -454,13 +454,13 @@ class Generator
      *
      * @throws \InvalidArgumentException
      */
-    public function defClassFunction(string $name, string $visibility = 'public', array $parameters = [])
+    public function defClassFunction(string $name, string $visibility = 'public', array $parameters = [], $comments = [])
     {
         if ($this->class === null) {
             throw new \InvalidArgumentException('Cannot create class function '.$name.' with out class creation');
         }
 
-        $this->defFunction($name, $parameters, $visibility.' ');
+        $this->defFunction($name, $parameters, $visibility.' ', $comments);
 
         return $this;
     }
@@ -486,7 +486,7 @@ class Generator
      *
      * @return Generator Chaining
      */
-    public function defFunction($name, array $parameters = [], $prefix = '')
+    public function defFunction($name, array $parameters = [], $prefix = '', $comments = [])
     {
         // Convert parameters to string
         $parameterList = array();
@@ -497,6 +497,7 @@ class Generator
 
         $this
             ->newLine('')
+            ->multiComment($comments)
             ->newLine($prefix.'function ' . $name . '('.$parameterList.')')
             ->newLine('{')
             ->tabs('');
