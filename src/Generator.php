@@ -119,7 +119,7 @@ class Generator
     /**
      * Add one line variable definition comment.
      *
-     * @param string $type Variable type
+     * @param string $type Variable typeHint
      * @param string $description Variable description
      * @param string $name Variable name
      * @return self Chaining
@@ -211,7 +211,7 @@ class Generator
         // Output variable definition
         $this->newLine($name);
 
-        // Get variable type
+        // Get variable typeHint
         switch (gettype($value)) {
             case 'integer':
             case 'boolean':
@@ -311,7 +311,7 @@ class Generator
      */
     public function endClass()
     {
-        $this->tabs--;
+        $this->tabs > 0 ? $this->tabs-- : null;
 
         // Close class definition
         return $this->newLine('}')
@@ -444,13 +444,49 @@ class Generator
     }
 
     /**
+     * Add class function definition.
+     *
+     * @param string $name       Class function name
+     * @param string $visibility Class function visibility
+     * @param array  $parameters Class function arguments
+     *
+     * @return $this Chaining
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function defClassFunction(string $name, string $visibility = 'public', array $parameters = [])
+    {
+        if ($this->class === null) {
+            throw new \InvalidArgumentException('Cannot create class function '.$name.' with out class creation');
+        }
+
+        $this->defFunction($name, $parameters, $visibility.' ');
+
+        return $this;
+    }
+
+    /**
+     * Close class function definition.
+     *
+     * @return $this Chaining
+     */
+    public function endClassFunction()
+    {
+        $this->endFunction();
+
+        return $this;
+    }
+
+    /**
      * Add function definition.
      *
-     * @param string $name Function name
-     * @param array $parameters Collection of parameters $typeHint => $paramName
+     * @param string $name       Function name
+     * @param array  $parameters Collection of parameters $typeHint => $paramName
+     * @param string $prefix Function prefix
+     *
      * @return Generator Chaining
      */
-    public function defFunction($name, $parameters = array())
+    public function defFunction($name, array $parameters = [], $prefix = '')
     {
         // Convert parameters to string
         $parameterList = array();
@@ -459,7 +495,9 @@ class Generator
         }
         $parameterList = sizeof($parameterList) ? implode(', ', $parameterList) : '';
 
-        $this->newLine('function ' . $name . '('.$parameterList.')')
+        $this
+            ->newLine('')
+            ->newLine($prefix.'function ' . $name . '('.$parameterList.')')
             ->newLine('{')
             ->tabs('');
 
@@ -477,7 +515,7 @@ class Generator
     {
         $this->tabs--;
 
-        return $this->newLine('}')->newLine('');
+        return $this->newLine('}');
     }
 
     /**
@@ -488,18 +526,24 @@ class Generator
     {
         // If namespace is defined - set it
         if (isset($namespace)) {
-            $this->defnamespace($namespace);
+            $this->defNamespace($namespace);
         }
     }
 
     /**
-     * Add namespace declaration
+     * Add namespace declaration.
+     *
      * @param string $name Namespace name
-     * @return self
+     *
+     * @return $this Chaining
      */
     public function defNamespace($name)
     {
-        return $this->newLine('namespace ' . $name . ';')->newLine();
+        if ($name !== '' && $name !== null) {
+            $this->newLine('namespace ' . $name . ';')->newLine();
+        }
+
+        return $this;
     }
 }
 //[PHPCOMPRESSOR(remove,end)]
