@@ -56,6 +56,34 @@ class Generator
 
         return $this;
     }
+    
+    /**
+     * Increase current code indentation.
+     *
+     * @param int $amount Indentation amount
+     *
+     * @return $this Chaining
+     */
+    public function increaseIndentation($amount = 1)
+    {
+        $this->tabs += $amount;
+
+        return $this;
+    }
+
+    /**
+     * Reduce current code indentation.
+     *
+     * @param int $amount Indentation amount
+     *
+     * @return $this Chaining
+     */
+    public function decreaseIndentation($amount = 1)
+    {
+        $this->tabs = $this->tabs > $amount ? $this->tabs - $amount : 0;
+
+        return $this;
+    }
 
     /**
      * Add new line to code.
