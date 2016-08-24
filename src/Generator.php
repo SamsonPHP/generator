@@ -477,21 +477,53 @@ class Generator
      * @param string $name       Class function name
      * @param string $visibility Class function visibility
      * @param array  $parameters Class function arguments
+     * @param array  $comments   Class function multi-line comments
+     * @param null   $returnType Class function return type PHP7
      *
-     * @return $this Chaining
+     * @return $this
      *
-     * @throws \InvalidArgumentException
      */
-    public function defClassFunction(string $name, string $visibility = 'public', array $parameters = [], $comments = [])
+    public function defClassFunction(string $name, string $visibility = 'public', array $parameters = [], array $comments = [], $returnType = null)
     {
         if ($this->class === null) {
             throw new \InvalidArgumentException('Cannot create class function '.$name.' with out class creation');
         }
 
-        $this->defFunction($name, $parameters, $visibility.' ', $comments);
+        $this->defFunction($name, $parameters, $visibility.' ', $comments, $returnType);
 
         return $this;
     }
+
+    /**
+     * @see self::defClassFunction with public visibility
+     *
+     * @return $this
+     */
+    public function defPublicClassFunction(string $name, array $parameters = [], array $comments = [], $returnType = null)
+    {
+        return $this->defClassFunction($name, 'public', $parameters, $comments, $returnType);
+    }
+
+    /**
+     * @see self::defClassFunction with private visibility
+     *
+     * @return $this
+     */
+    public function defPrivateClassFunction(string $name, array $parameters = [], array $comments = [], $returnType = null)
+    {
+        return $this->defClassFunction($name, 'private', $parameters, $comments, $returnType);
+    }
+
+    /**
+     * @see self::defClassFunction with protected visibility
+     *
+     * @return $this
+     */
+    public function defProtectedClassFunction(string $name, array $parameters = [], array $comments = [], $returnType = null)
+    {
+        return $this->defClassFunction($name, 'protected', $parameters, $comments, $returnType);
+    }
+
 
     /**
      * Close class function definition.
@@ -510,11 +542,13 @@ class Generator
      *
      * @param string $name       Function name
      * @param array  $parameters Collection of parameters $typeHint => $paramName
-     * @param string $prefix Function prefix
+     * @param string $prefix     Function prefix
+     * @param array  $comments   Function multi-line comments
+     * @param string $returnType Function return type PHP7
      *
      * @return Generator Chaining
      */
-    public function defFunction($name, array $parameters = [], $prefix = '', $comments = [])
+    public function defFunction(string $name, array $parameters = [], string $prefix = '', array $comments = [], string $returnType = null)
     {
         // Convert parameters to string
         $parameterList = array();
@@ -526,7 +560,7 @@ class Generator
         $this
             ->newLine('')
             ->multiComment($comments)
-            ->newLine($prefix.'function ' . $name . '('.$parameterList.')')
+            ->newLine($prefix.'function ' . $name . '('.$parameterList.')' . ($returnType  !== null ? ' : ' . $returnType : ''))
             ->newLine('{')
             ->tabs('');
 
