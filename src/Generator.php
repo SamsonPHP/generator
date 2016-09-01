@@ -173,6 +173,34 @@ class Generator
     }
 
     /**
+     * Generate correct value.
+     *
+     * Metho handles arrays, numerics, strings and constants.
+     *
+     * @param mixed $value Value to put in generated code
+     *
+     * @return $this
+     */
+    protected function defineValue($value) 
+    {
+        // If item value is array - recursion
+        if (is_array($value)) {
+            $this->arrayValue($value);
+        } elseif (is_numeric($value) || is_float($value)) {
+            $this->text($value);
+        } else {
+            try { // Try to evaluate
+                eval('$value = '.$value.';');
+                $this->text($value);
+            } catch (\Throwable $e) { // Consider it as a string
+                $this->stringValue($value);
+            }
+        }
+        
+        return $this;
+    }
+
+    /**
      * Add array values definition.
      *
      * @param array $items Array key-value pairs collection
@@ -181,26 +209,19 @@ class Generator
     public function arrayValue(array $items = array())
     {
         if (sizeof($items)) {
-            $this->text('array(');
+            $this->text('[');
             $this->tabs++;
 
             // Iterate array items
             foreach ($items as $key => $value) {
                 // Start array key definition
-                $this->newLine()->stringValue($key)->text(' => ');
-
-                // If item value is array - recursion
-                if (is_array($value)) {
-                    $this->arrayValue($value)->text(',');
-                } else {
-                    $this->stringValue($value)->text(',');
-                }
+                $this->newLine()->defineValue($key)->text(' => ')->defineValue($value)->text(',');
             }
 
             $this->tabs--;
-            $this->newLine(')');
+            $this->newLine(']');
         } else {
-            $this->text('array()');
+            $this->text('[]');
         }
 
         return $this;
