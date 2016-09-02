@@ -190,7 +190,7 @@ class Generator
             $this->text($value);
         } else {
             try { // Try to evaluate
-                eval('$value = '.$value.';');
+                eval('$value2 = '.$value.';');
                 $this->text($value);
             } catch (\Throwable $e) { // Consider it as a string
                 $this->stringValue($value);
