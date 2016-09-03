@@ -17,16 +17,14 @@ class CommentsGenerator extends AbstractGenerator
      */
     public function code($indentation = 0) : string
     {
-        $innerIndentation = $this->indentation(1).' * ';
-
         $formattedCode = ['/**'];
 
         // Prepend inner indentation to code
         foreach ($this->code as $codeLine) {
-            $formattedCode[] = $innerIndentation . $codeLine;
+            $formattedCode[] = ' * ' . $codeLine;
         }
 
-        $formattedCode[] = '**/';
+        $formattedCode[] = ' */';
 
         return implode("\n" . $this->indentation($indentation), $formattedCode);
     }

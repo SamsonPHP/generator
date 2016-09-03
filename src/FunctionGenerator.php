@@ -55,6 +55,8 @@ class FunctionGenerator extends AbstractGenerator
         }
         $formattedCode[] = '}';
 
-        return implode("\n".$this->indentation($indentation), $formattedCode);
+        $this->generatedCode .= implode("\n".$this->indentation($indentation), $formattedCode);
+
+        return $this->generatedCode;
     }
 }

@@ -15,6 +15,12 @@ abstract class AbstractGenerator
     /** @var GenericGenerator Parent class generator */
     protected $parent;
 
+    /** @var string Generated code */
+    protected $generatedCode;
+
+    /** @var int Indentation level */
+    protected $indentation = 0;
+
     /** @var array Collection of code lines */
     protected $code = [];
 
@@ -23,7 +29,7 @@ abstract class AbstractGenerator
      *
      * @param GenericGenerator $parent Parent generator
      */
-    public function __construct(GenericGenerator $parent = null)
+    public function __construct(AbstractGenerator $parent = null)
     {
         $this->parent = $parent;
     }
@@ -35,6 +41,9 @@ abstract class AbstractGenerator
      */
     public function end() : AbstractGenerator
     {
+        // Pass generated code to parent
+        $this->parent->generatedCode .= $this->code($this->indentation)."\n";
+
         return $this->parent;
     }
 
