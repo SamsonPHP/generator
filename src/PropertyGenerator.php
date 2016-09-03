@@ -35,21 +35,6 @@ class PropertyGenerator extends AbstractGenerator
     }
 
     /**
-     * Set property type hint comment
-     *
-     * @param string      $type        Property type
-     * @param string|null $description Property description
-     *
-     * @return PropertyGenerator
-     */
-    public function defTypeHint(string $type, string $description = null) : PropertyGenerator
-    {
-        return (new CommentsGenerator($this))
-            ->defLine('@var ' . $type . ($description ?? ''))
-            ->end();
-    }
-
-    /**
      * Set protected property visibility.
      *
      * @return PropertyGenerator
