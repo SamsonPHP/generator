@@ -36,28 +36,4 @@ PHP;
 
         static::assertEquals($expected, $generated);
     }
-
-    public function testDefFunctionWithComments()
-    {
-        $code = 'echo(\'test\')';
-        $generated = $this->generator->defComment()
-                ->defLine('Test comment line')
-                ->defLine('Test comment line2')
-                ->end()
-            ->defLine($code)
-            ->code();
-
-        $expected = <<<PHP
-/**
- * Test comment line
- * Test comment line2
- */
-function testFunction()
-{
- echo('test')
-}
-PHP;
-
-        static::assertEquals($expected, $generated);
-    }
 }
