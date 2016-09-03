@@ -145,65 +145,29 @@ class ClassGenerator extends GenericGenerator
     }
 
     /**
-     * Set class property.
-     *
-     * @param string $name Property name
-     * @param mixed $value Property value
-     * @param array  $comment Property PHPDOC comment strings collection
-     * @param string $visibility Property visibility
-     * @param bool   $static Flag that property is static
-     *
-     * @return ClassGenerator
-     */
-    public function defProperty(
-        string $name,
-        $value,
-        array $comment = [],
-        string $visibility = self::VISIBILITY_PUBLIC,
-        bool $static = false
-    ) : ClassGenerator {
-        if ($static) {
-            $collection = &$this->staticProperties[$name];
-        } else {
-            $collection = &$this->properties[$name];
-        }
-
-        $collection[] = [$comment, $static, $visibility, $value];
-
-        return $this;
-    }
-
-    /**
      * Set protected class property.
      *
      * @param string $name Property name
      * @param mixed $value Property value
-     * @param array  $comment Property PHPDOC comment strings collection
      *
-     * @return ClassGenerator
+     * @return PropertyGenerator
      */
-    public function defProtectedProperty(string $name, $value, array $comment = [])
+    public function defProtectedProperty(string $name, $value) : PropertyGenerator
     {
-        return $this->defProperty($name, $value, $comment, self::VISIBILITY_PROTECTED);
+        return $this->defProperty($name, $value)->defProtected();
     }
 
     /**
-     * Set static class property.
+     * Set class property.
      *
      * @param string $name Property name
      * @param mixed $value Property value
-     * @param array  $comment Property PHPDOC comment strings collection
-     * @param string $visibility Property visibility
      *
-     * @return ClassGenerator
+     * @return PropertyGenerator
      */
-    public function defStaticProperty(
-        string $name,
-        $value,
-        array $comment = [],
-        string $visibility = self::VISIBILITY_PUBLIC
-    ) : ClassGenerator {
-        return $this->defProperty($name, $value, $comment, $visibility, true);
+    public function defProperty(string $name, $value) : PropertyGenerator
+    {
+        return new PropertyGenerator($name, $this);
     }
 
     /**
@@ -211,12 +175,24 @@ class ClassGenerator extends GenericGenerator
      *
      * @param string $name Property name
      * @param mixed $value Property value
-     * @param array  $comment Property PHPDOC comment strings collection
      *
-     * @return ClassGenerator
+     * @return PropertyGenerator
      */
-    public function defProtectedStaticProperty(string $name, $value, array $comment = [])
+    public function defProtectedStaticProperty(string $name, $value) : PropertyGenerator
     {
-        return $this->defStaticProperty($name, $value, $comment, self::VISIBILITY_PROTECTED);
+        return $this->defStaticProperty($name, $value)->defProtected();
+    }
+
+    /**
+     * Set static class property.
+     *
+     * @param string $name Property name
+     * @param mixed $value Property value
+     *
+     * @return PropertyGenerator
+     */
+    public function defStaticProperty(string $name, $value) : PropertyGenerator
+    {
+        return $this->defProperty($name, $value)->defStatic();
     }
 }
