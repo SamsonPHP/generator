@@ -12,10 +12,12 @@ namespace samsonphp\generator;
  */
 class CommentsGenerator extends AbstractGenerator
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function code($indentation = 0) : string
+    protected function formatSingleLine(string $indentation)
+    {
+        return $indentation.'/** '.$this->code[0].' */';
+    }
+
+    protected function formatMultiLine(string $indentation)
     {
         $formattedCode = ['/**'];
 
@@ -26,6 +28,18 @@ class CommentsGenerator extends AbstractGenerator
 
         $formattedCode[] = ' */';
 
-        return implode("\n" . $this->indentation($indentation), $formattedCode);
+        return implode("\n" . $indentation, $formattedCode);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function code($indentation = 0) : string
+    {
+        $indentationString = $this->indentation($indentation);
+
+        return count($this->code) === 1
+            ? $this->formatSingleLine($indentationString)
+            : $this->formatMultiLine($indentationString);
     }
 }
