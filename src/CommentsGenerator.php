@@ -29,7 +29,7 @@ class CommentsGenerator extends AbstractGenerator
      *
      * @param string $indentation Indentation string
      *
-     * @return string Multiline comments code
+     * @return string Multi-line comments code
      */
     protected function formatMultiLine(string $indentation)
     {
