@@ -167,7 +167,7 @@ class ClassGenerator extends GenericGenerator
      */
     public function defProperty(string $name, $value) : PropertyGenerator
     {
-        return new PropertyGenerator($name, $this);
+        return new PropertyGenerator($name, $value, $this);
     }
 
     /**
