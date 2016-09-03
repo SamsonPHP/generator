@@ -6,7 +6,6 @@
 namespace samsonframework\generator\tests;
 
 use PHPUnit\Framework\TestCase;
-use samsonphp\generator\CommentsGenerator;
 use samsonphp\generator\PropertyGenerator;
 
 /**
@@ -37,10 +36,21 @@ PHP;
 
     public function testProtectedProperty()
     {
-        $generated = $this->generator->defVisibility()->code();
+        $generated = $this->generator->defProtected()->code();
 
         $expected = <<<'PHP'
-public $testProperty;
+protected $testProperty;
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testPrivateProperty()
+    {
+        $generated = $this->generator->defPrivate()->code();
+
+        $expected = <<<'PHP'
+private $testProperty;
 PHP;
 
         static::assertEquals($expected, $generated);

@@ -41,7 +41,7 @@ class PropertyGenerator extends AbstractGenerator
      *
      * @return PropertyGenerator
      */
-    public function defVisibility(string $visibility) : PropertyGenerator
+    protected function defVisibility(string $visibility) : PropertyGenerator
     {
         $this->visibility = $visibility;
 
