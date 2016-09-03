@@ -15,6 +15,9 @@ class PropertyGenerator extends AbstractGenerator
     /** @var string Property name */
     protected $name;
 
+    /** @var string Property value */
+    protected $value;
+
     /** @var bool Flag that method is static */
     protected $isStatic = false;
 
@@ -24,12 +27,14 @@ class PropertyGenerator extends AbstractGenerator
     /**
      * PropertyGenerator constructor.
      *
-     * @param string                 $name Property name
+     * @param string                 $name   Property name
+     * @param mixed                  $value  Property value
      * @param AbstractGenerator|null $parent Parent generator
      */
-    public function __construct(string $name, AbstractGenerator $parent = null)
+    public function __construct(string $name, $value = null, AbstractGenerator $parent = null)
     {
         $this->name = $name;
+        $this->value = $value;
 
         parent::__construct($parent);
     }
