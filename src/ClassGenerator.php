@@ -12,8 +12,14 @@ namespace samsonphp\generator;
  */
 class ClassGenerator
 {
+    /** OOP public visibility */
     const VISIBILITY_PUBLIC = 'public';
+
+    /** OOP protected visibility */
     const VISIBILITY_PROTECTED = 'protected';
+
+    /** OOP private visibility */
+    const VISIBILITY_PRIVATE = 'private';
 
     /** @var Generator */
     protected $generator;
