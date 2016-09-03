@@ -219,12 +219,4 @@ class ClassGenerator extends GenericGenerator
     {
         return $this->defStaticProperty($name, $value, $comment, self::VISIBILITY_PROTECTED);
     }
-
-    public function defMethod(
-        string $name,
-        string $code
-    )
-    {
-
-    }
 }

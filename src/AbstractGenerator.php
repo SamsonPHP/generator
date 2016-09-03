@@ -65,6 +65,16 @@ abstract class AbstractGenerator
     }
 
     /**
+     * Set Comments block.
+     *
+     * @return CommentsGenerator Comments block generator
+     */
+    public function defComment() : CommentsGenerator
+    {
+        return new CommentsGenerator($this);
+    }
+
+    /**
      * Generate code.
      *
      * @param int $indentation Code level
