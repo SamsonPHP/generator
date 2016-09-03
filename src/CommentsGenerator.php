@@ -12,11 +12,25 @@ namespace samsonphp\generator;
  */
 class CommentsGenerator extends AbstractGenerator
 {
+    /**
+     * Format comments code into single line comment.
+     *
+     * @param string $indentation Indentation string
+     *
+     * @return string Single line comments code
+     */
     protected function formatSingleLine(string $indentation)
     {
         return $indentation.'/** '.$this->code[0].' */';
     }
 
+    /**
+     * Format comments code into multi line comment.
+     *
+     * @param string $indentation Indentation string
+     *
+     * @return string Multiline comments code
+     */
     protected function formatMultiLine(string $indentation)
     {
         $formattedCode = ['/**'];
