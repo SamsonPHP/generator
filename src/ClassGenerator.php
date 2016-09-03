@@ -6,11 +6,11 @@
 namespace samsonphp\generator;
 
 /**
- * Class ClassGenerator
+ * Class generator class.
  *
  * @author Vitaly Egorov <egorov@samsonos.com>
  */
-class ClassGenerator
+class ClassGenerator extends GenericGenerator
 {
     /** OOP public visibility */
     const VISIBILITY_PUBLIC = 'public';
@@ -20,9 +20,6 @@ class ClassGenerator
 
     /** OOP private visibility */
     const VISIBILITY_PRIVATE = 'private';
-
-    /** @var Generator */
-    protected $generator;
 
     /** @var string Class name */
     protected $className;
@@ -54,10 +51,55 @@ class ClassGenerator
     /** @var array Class methods */
     protected $methods;
 
-    public function __construct(Generator $generator, string $className)
+    /** @var bool Flag that class is abstract */
+    protected $isAbstract;
+
+    /** @var bool Flag that class is final */
+    protected $isFinal;
+
+    /**
+     * ClassGenerator constructor.
+     *
+     * @param GenericGenerator $parent Parent generator
+     * @param string           $className Class name
+     */
+    public function __construct(GenericGenerator $parent, string $className)
     {
-        $this->generator = $generator;
         $this->className = $className;
+
+        parent::__construct($parent);
+    }
+
+    /**
+     * Set class to be final.
+     *
+     * @return ClassGenerator
+     */
+    public function defFinal() : ClassGenerator
+    {
+        if ($this->isAbstract) {
+            throw new \InvalidArgumentException('Class cannot be final as it is already abstract');
+        }
+
+        $this->isFinal = true;
+
+        return $this;
+    }
+
+    /**
+     * Set class to be abstract.
+     *
+     * @return ClassGenerator
+     */
+    public function defAbstract() : ClassGenerator
+    {
+        if ($this->isFinal) {
+            throw new \InvalidArgumentException('Class cannot be abstract as it is already final');
+        }
+
+        $this->isAbstract = true;
+
+        return $this;
     }
 
     /**
@@ -176,5 +218,13 @@ class ClassGenerator
     public function defProtectedStaticProperty(string $name, $value, array $comment = [])
     {
         return $this->defStaticProperty($name, $value, $comment, self::VISIBILITY_PROTECTED);
+    }
+
+    public function defMethod(
+        string $name,
+        string $code
+    )
+    {
+
     }
 }
