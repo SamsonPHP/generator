@@ -18,5 +18,10 @@
             "samsonphp\\generator\\": "src/"
         }
     },
+    "autoload-dev" : {
+        "psr-4": {
+            "samsonphp\\generator\\tests\\": "tests/"
+        }
+    },
     "extra": { "samson_module_ignore": "1" }
 }

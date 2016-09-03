@@ -1,0 +1,64 @@
+<?php declare(strict_types = 1);
+/**
+ * Created by Vitaly Iegorov <egorov@samsonos.com>.
+ * on 03.09.16 at 11:30
+ */
+namespace samsonphp\generator;
+
+/**
+ * Class property generation class.
+ *
+ * @author Vitaly Egorov <egorov@samsonos.com>
+ */
+class PropertyGenerator extends AbstractGenerator
+{
+    /** @var string Property name */
+    protected $name;
+
+    /** @var bool Flag that method is static */
+    protected $isStatic = false;
+
+    /** @var string Method visibility */
+    protected $visibility = ClassGenerator::VISIBILITY_PUBLIC;
+
+    /**
+     * PropertyGenerator constructor.
+     *
+     * @param string                 $name Property name
+     * @param AbstractGenerator|null $parent Parent generator
+     */
+    public function __construct(string $name, AbstractGenerator $parent = null)
+    {
+        $this->name = $name;
+
+        parent::__construct($parent);
+    }
+
+    /**
+     * Set method to be static.
+     *
+     * @return PropertyGenerator
+     */
+    public function defStatic() : PropertyGenerator
+    {
+        $this->isStatic = true;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function code($indentation = 0) : string
+    {
+        $this->generatedCode .= $this->indentation($indentation)
+            .$this->visibility
+            .' '
+            .($this->isStatic ? 'static ' : '')
+            .'$'
+            .$this->name
+            .';';
+
+        return $this->generatedCode;
+    }
+}
