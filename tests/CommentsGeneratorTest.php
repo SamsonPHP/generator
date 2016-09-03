@@ -52,4 +52,34 @@ PHP;
 
         static::assertEquals($expected, $generated);
     }
+
+    public function testVarComment()
+    {
+        $generated = $this->generator
+            ->defVar('testType', 'Test description')
+            ->code();
+
+        $expected = <<<'PHP'
+/** @var testType Test description */
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testVarMultilineComment()
+    {
+        $generated = $this->generator
+            ->defLine('Test comment')
+            ->defVar('testType', 'Test description')
+            ->code();
+
+        $expected = <<<'PHP'
+/**
+ * Test comment
+ * @var testType Test description
+ */
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
 }
