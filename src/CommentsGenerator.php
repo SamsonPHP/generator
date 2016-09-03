@@ -13,6 +13,31 @@ namespace samsonphp\generator;
 class CommentsGenerator extends AbstractGenerator
 {
     /**
+     * Set @var comment line.
+     *
+     * @param string      $type        Type
+     * @param string|null $description Description
+     *
+     * @return CommentsGenerator
+     */
+    public function defVar(string $type, string $description = null) : CommentsGenerator
+    {
+        return $this->defLine('@var ' . $type . ($description !== null ? ' ' . $description : ''));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function code($indentation = 0) : string
+    {
+        $indentationString = $this->indentation($indentation);
+
+        return count($this->code) === 1
+            ? $this->formatSingleLine($indentationString)
+            : $this->formatMultiLine($indentationString);
+    }
+
+    /**
      * Format comments code into single line comment.
      *
      * @param string $indentation Indentation string
@@ -43,17 +68,5 @@ class CommentsGenerator extends AbstractGenerator
         $formattedCode[] = ' */';
 
         return implode("\n" . $indentation, $formattedCode);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function code($indentation = 0) : string
-    {
-        $indentationString = $this->indentation($indentation);
-
-        return count($this->code) === 1
-            ? $this->formatSingleLine($indentationString)
-            : $this->formatMultiLine($indentationString);
     }
 }

@@ -55,4 +55,20 @@ PHP;
 
         static::assertEquals($expected, $generated);
     }
+
+    public function testPropertyTypeHint()
+    {
+        $generated = $this->generator->defPrivate()
+            ->defComment()
+            ->defVar('testType', 'Test description')
+            ->end()
+            ->code();
+
+        $expected = <<<'PHP'
+/** @var testType Test description */
+private $testProperty;
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
 }
