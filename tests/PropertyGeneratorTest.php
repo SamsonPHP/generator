@@ -34,4 +34,15 @@ PHP;
 
         static::assertEquals($expected, $generated);
     }
+
+    public function testProtectedProperty()
+    {
+        $generated = $this->generator->defVisibility()->code();
+
+        $expected = <<<'PHP'
+public $testProperty;
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
 }

@@ -35,6 +35,40 @@ class PropertyGenerator extends AbstractGenerator
     }
 
     /**
+     * Set property visibility.
+     *
+     * @param string $visibility Property visibility
+     *
+     * @return PropertyGenerator
+     */
+    public function defVisibility(string $visibility) : PropertyGenerator
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    /**
+     * Set protected property visibility.
+     *
+     * @return PropertyGenerator
+     */
+    public function defProtected() : PropertyGenerator
+    {
+        return $this->defVisibility(ClassGenerator::VISIBILITY_PROTECTED);
+    }
+
+    /**
+     * Set private property visibility.
+     *
+     * @return PropertyGenerator
+     */
+    public function defPrivate() : PropertyGenerator
+    {
+        return $this->defVisibility(ClassGenerator::VISIBILITY_PRIVATE);
+    }
+
+    /**
      * Set method to be static.
      *
      * @return PropertyGenerator
