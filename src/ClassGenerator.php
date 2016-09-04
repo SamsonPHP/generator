@@ -149,14 +149,16 @@ class ClassGenerator extends AbstractGenerator
     /**
      * Set protected class property.
      *
-     * @param string $name Property name
-     * @param mixed $value Property value
+     * @param string $name        Property name
+     * @param string $type        Property type
+     * @param mixed  $value       Property value
+     * @param string $description Property description
      *
      * @return PropertyGenerator
      */
-    public function defProtectedProperty(string $name, $value) : PropertyGenerator
+    public function defProtectedProperty(string $name, string $type, $value, string $description = null) : PropertyGenerator
     {
-        return $this->defProperty($name, $value)->defProtected();
+        return $this->defProperty($name, $type, $value, $description)->defProtected();
     }
 
     /**

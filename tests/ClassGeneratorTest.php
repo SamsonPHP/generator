@@ -201,4 +201,64 @@ PHP;
 
         static::assertEquals($expected, $generated);
     }
+
+    public function testDefProtectedPropertyWithDescription()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defProtectedProperty('testProperty', 'TestType', '', 'Property description')->end()
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+class testClass
+{
+    /** @var TestType Property description */
+    protected $testProperty;
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testDefStaticPropertyWithDescription()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defStaticProperty('testProperty', 'TestType', '', 'Property description')->end()
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+class testClass
+{
+    /** @var TestType Property description */
+    public static $testProperty;
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testDefStaticProtectedPropertyWithDescription()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defProtectedStaticProperty('testProperty', 'TestType', '', 'Property description')->end()
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+class testClass
+{
+    /** @var TestType Property description */
+    protected static $testProperty;
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
 }
