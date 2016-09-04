@@ -75,38 +75,6 @@ class FunctionGenerator extends AbstractGenerator
     }
 
     /**
-     * Build function arguments.
-     *
-     * @return string
-     */
-    protected function buildArguments() : string
-    {
-        $argumentsString = [];
-        foreach ($this->arguments as $argumentName => $argumentType) {
-            // Group name with type
-            $argumentsString[] = ($argumentType !== null ? $argumentType . ' ' : '') . '$' . $argumentName;
-        }
-
-        return implode(', ', $argumentsString);
-    }
-
-    /**
-     * Build function arguments.
-     *
-     * @return string
-     */
-    protected function buildArguments() : string
-    {
-        $argumentsString = [];
-        foreach ($this->arguments as $argumentName => $argumentType) {
-            // Group name with type
-            $argumentsString[] = ($argumentType !== null ? $argumentType . ' ' : '') . '$' . $argumentName;
-        }
-
-        return implode(', ', $argumentsString);
-    }
-
-    /**
      * Build function definition.
      *
      * @return string Function definition
@@ -114,5 +82,21 @@ class FunctionGenerator extends AbstractGenerator
     protected function buildDefinition()
     {
         return 'function ' . $this->name;
+    }
+
+    /**
+     * Build function arguments.
+     *
+     * @return string
+     */
+    protected function buildArguments() : string
+    {
+        $argumentsString = [];
+        foreach ($this->arguments as $argumentName => $argumentType) {
+            // Group name with type
+            $argumentsString[] = ($argumentType !== null ? $argumentType . ' ' : '') . '$' . $argumentName;
+        }
+
+        return implode(', ', $argumentsString);
     }
 }
