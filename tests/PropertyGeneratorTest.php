@@ -56,7 +56,7 @@ PHP;
         static::assertEquals($expected, $generated);
     }
 
-    public function testPropertyTypeHint()
+    public function testPropertyWithTypeHint()
     {
         $generated = $this->generator->defPrivate()
             ->defComment()
