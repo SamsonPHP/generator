@@ -314,4 +314,116 @@ PHP;
 
         static::assertEquals($expected, $generated);
     }
+
+    public function testDefMethodWithArgumentsAndComment()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defMethod('testMethod')
+            ->defArgument('testArgument', 'TestType', 'Test description')
+            ->defComment()->defLine('Test comment')->end()
+            ->end()
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+class testClass
+{
+    /**
+     * Test comment
+     * @param TestType $testArgument Test description
+     */
+    public function testMethod(TestType $testArgument)
+    {
+    }
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testDefProtectedMethodWithArgumentsAndComment()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defProtectedMethod('testMethod')
+            ->defArgument('testArgument', 'TestType', 'Test description')
+            ->defComment()->defLine('Test comment')->end()
+            ->end()
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+class testClass
+{
+    /**
+     * Test comment
+     * @param TestType $testArgument Test description
+     */
+    protected function testMethod(TestType $testArgument)
+    {
+    }
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testDefStaticMethodWithArgumentsAndComment()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defStaticMethod('testMethod')
+            ->defArgument('testArgument', 'TestType', 'Test description')
+            ->defComment()->defLine('Test comment')->end()
+            ->end()
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+class testClass
+{
+    /**
+     * Test comment
+     * @param TestType $testArgument Test description
+     */
+    public static function testMethod(TestType $testArgument)
+    {
+    }
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testDefProtectedStaticMethodWithArgumentsAndComment()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defProtectedStaticMethod('testMethod')
+            ->defArgument('testArgument', 'TestType', 'Test description')
+            ->defComment()->defLine('Test comment')->end()
+            ->end()
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+class testClass
+{
+    /**
+     * Test comment
+     * @param TestType $testArgument Test description
+     */
+    protected static function testMethod(TestType $testArgument)
+    {
+    }
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
 }

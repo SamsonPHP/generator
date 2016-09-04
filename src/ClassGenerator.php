@@ -183,7 +183,7 @@ class ClassGenerator extends AbstractGenerator
      */
     public function defProtectedMethod(string $name) : MethodGenerator
     {
-        return $this->defMethod($name);
+        return $this->defMethod($name)->defProtected();
     }
 
     /**

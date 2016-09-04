@@ -112,6 +112,6 @@ class CommentsGenerator extends AbstractGenerator
 
         $formattedCode[] = ' */';
 
-        return implode("\n" . $indentation, $formattedCode);
+        return $indentation . implode("\n" . $indentation, $formattedCode);
     }
 }
