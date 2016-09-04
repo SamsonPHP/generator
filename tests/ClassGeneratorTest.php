@@ -96,6 +96,28 @@ PHP;
             ->defAbstract();
     }
 
+    public function testDefUse()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defUse('\testclass\scope\TestClass')
+            ->defUse('\testclass\scope2\TestClass')
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+use \testclass\scope\TestClass;
+use \testclass\scope2\TestClass;
+
+class testClass
+{
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
     public function testDefComment()
     {
         $generated = $this->classGenerator
