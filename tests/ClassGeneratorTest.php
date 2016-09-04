@@ -23,6 +23,13 @@ class ClassGeneratorTest extends TestCase
         $this->classGenerator = new ClassGenerator('testClass');
     }
 
+    public function testWithoutNamespaceException()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->classGenerator->code();
+    }
+
     public function testDefNamespace()
     {
         $generated = $this->classGenerator
@@ -261,4 +268,6 @@ PHP;
 
         static::assertEquals($expected, $generated);
     }
+
+
 }
