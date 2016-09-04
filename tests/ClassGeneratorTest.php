@@ -125,6 +125,28 @@ PHP;
         static::assertEquals($expected, $generated);
     }
 
+    public function testDefTrait()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defTrait('\testclass\scope\TestTrait')
+            ->defTrait('\testclass\scope2\TestTrait')
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+class testClass
+{
+    use \testclass\scope\TestTrait;
+    use \testclass\scope2\TestTrait;
+
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
     public function testDefComment()
     {
         $generated = $this->classGenerator

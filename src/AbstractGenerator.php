@@ -32,20 +32,6 @@ abstract class AbstractGenerator
     }
 
     /**
-     * Decrease indentation.
-     *
-     * @param int $indentation
-     *
-     * @return $this
-     */
-    public function setIndentation(int $indentation) : AbstractGenerator
-    {
-        $this->indentation = $indentation;
-
-        return $this;
-    }
-
-    /**
      * Increase indentation.
      *
      * @return $this
@@ -92,7 +78,21 @@ abstract class AbstractGenerator
      */
     public function defComment() : CommentsGenerator
     {
-        return new CommentsGenerator($this);
+        return (new CommentsGenerator($this))->setIndentation($this->indentation);
+    }
+
+    /**
+     * Decrease indentation.
+     *
+     * @param int $indentation
+     *
+     * @return $this
+     */
+    public function setIndentation(int $indentation) : AbstractGenerator
+    {
+        $this->indentation = $indentation;
+
+        return $this;
     }
 
     /**

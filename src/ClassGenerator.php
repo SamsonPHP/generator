@@ -32,20 +32,11 @@ class ClassGenerator extends AbstractGenerator
     /** @var array Collection of class uses */
     protected $uses = [];
 
-    /** @var string Multiline file description */
+    /** @var array Collection of class used traits */
+    protected $traits = [];
+
+    /** @var string Multi-line file description */
     protected $fileDescription;
-
-    /** @var array Class constants */
-    protected $constants;
-
-    /** @var array Class static properties */
-    protected $staticProperties;
-
-    /** @var array Class static methods */
-    protected $staticMethods;
-
-    /** @var array Class properties */
-    protected $properties;
 
     /** @var array Class methods */
     protected $methods;
@@ -99,13 +90,27 @@ class ClassGenerator extends AbstractGenerator
     /**
      * Set class use.
      *
-     * @param string $use
+     * @param string $use Use class name
      *
      * @return ClassGenerator
      */
     public function defUse(string $use) : ClassGenerator
     {
         $this->uses[] = $use;
+
+        return $this;
+    }
+
+    /**
+     * Set class trait use.
+     *
+     * @param string $trait Trait class name
+     *
+     * @return ClassGenerator
+     */
+    public function defTrait(string $trait) : ClassGenerator
+    {
+        $this->traits[] = $trait;
 
         return $this;
     }
@@ -256,6 +261,19 @@ class ClassGenerator extends AbstractGenerator
         $formattedCode[] = $this->buildDefinition();
         $formattedCode[] = '{';
 
+        $indentationString = $this->indentation($indentation);
+        $innerIndentation = $this->indentation(1);
+
+        // Add traits
+        foreach ($this->traits as $trait) {
+            $formattedCode[] = $innerIndentation . 'use ' . $trait . ';';
+        }
+
+        // One empty line after traits if we have them
+        if (count($this->traits)) {
+            $formattedCode[] = '';
+        }
+
         // Prepend file description if present
         if ($this->fileDescription !== null) {
             array_unshift($formattedCode, $this->fileDescription);
@@ -263,7 +281,7 @@ class ClassGenerator extends AbstractGenerator
 
         // Add properties
         if (array_key_exists(PropertyGenerator::class, $this->generatedCode)) {
-            $formattedCode[] = $this->indentation(1) . $this->generatedCode[PropertyGenerator::class];
+            $formattedCode[] = $this->generatedCode[PropertyGenerator::class];
         }
 
         // Add properties
@@ -273,7 +291,7 @@ class ClassGenerator extends AbstractGenerator
 
         $formattedCode[] = '}';
 
-        $code = implode("\n" . $this->indentation($indentation), $formattedCode);
+        $code = implode("\n" . $indentationString, $formattedCode);
 
         return $code;
     }
