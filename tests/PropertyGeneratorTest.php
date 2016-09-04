@@ -71,4 +71,11 @@ PHP;
 
         static::assertEquals($expected, $generated);
     }
+
+    public function testPropertyWithLineException()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->generator->defLine('test;');
+    }
 }

@@ -87,6 +87,15 @@ class PropertyGenerator extends AbstractGenerator
 
     /**
      * {@inheritdoc}
+     * @throws \InvalidArgumentException
+     */
+    public function defLine(string $code)
+    {
+        throw new \InvalidArgumentException('Property cannot have code lines');
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function code(int $indentation = 0) : string
     {
