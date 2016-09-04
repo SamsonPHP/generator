@@ -40,19 +40,22 @@ PHP;
     public function testDefFunctionWithComments()
     {
         $code = 'echo(\'test\')';
-        $generated = $this->generator->defComment()
+        $generated = $this->generator
+            ->defArgument('testArgument', 'SuperType', 'Description for argument')
+            ->defComment()
             ->defLine('Test comment line')
             ->defLine('Test comment line2')
             ->end()
             ->defLine($code)
             ->code();
 
-        $expected = <<<PHP
+        $expected = <<<'PHP'
 /**
  * Test comment line
  * Test comment line2
+ * @param SuperType $testArgument Description for argument
  */
-function testFunction()
+function testFunction(SuperType $testArgument)
 {
  echo('test')
 }

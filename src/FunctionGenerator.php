@@ -84,4 +84,12 @@ class FunctionGenerator extends AbstractGenerator
     {
         return 'function ' . $this->name;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function defComment() : CommentsGenerator
+    {
+        return new FunctionCommentsGenerator($this->arguments, $this->argumentDescriptions, $this);
+    }
 }
