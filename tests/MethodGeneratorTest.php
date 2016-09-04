@@ -30,7 +30,7 @@ class MethodGeneratorTest extends TestCase
         $expected = <<<PHP
 public function testMethod()
 {
- echo('test')
+    echo('test')
 }
 PHP;
 
@@ -44,7 +44,7 @@ PHP;
         $expected = <<<PHP
 public static function testMethod()
 {
- echo('test')
+    echo('test')
 }
 PHP;
 
@@ -58,7 +58,7 @@ PHP;
         $expected = <<<PHP
 final public function testMethod()
 {
- echo('test')
+    echo('test')
 }
 PHP;
 
@@ -72,7 +72,7 @@ PHP;
         $expected = <<<PHP
 final public static function testMethod()
 {
- echo('test')
+    echo('test')
 }
 PHP;
 

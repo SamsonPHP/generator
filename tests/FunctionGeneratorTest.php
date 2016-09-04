@@ -30,7 +30,7 @@ class FunctionGeneratorTest extends TestCase
         $expected = <<<PHP
 function testFunction()
 {
- echo('test')
+    echo('test')
 }
 PHP;
 
@@ -57,7 +57,7 @@ PHP;
  */
 function testFunction(SuperType $testArgument)
 {
- echo('test')
+    echo('test')
 }
 PHP;
 
@@ -71,7 +71,7 @@ PHP;
         $expected = <<<'PHP'
 function testFunction($testArgument)
 {
- echo('test')
+    echo('test')
 }
 PHP;
 
@@ -85,7 +85,7 @@ PHP;
         $expected = <<<'PHP'
 function testFunction(array $testArgument)
 {
- echo('test')
+    echo('test')
 }
 PHP;
 
@@ -104,7 +104,7 @@ PHP;
         $expected = <<<'PHP'
 function testFunction(array $testArgument, $testArgument2, TestType $testArgument3)
 {
- echo('test')
+    echo('test')
 }
 PHP;
 

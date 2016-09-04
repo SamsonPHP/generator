@@ -161,4 +161,23 @@ PHP;
 
         static::assertEquals($expected, $generated);
     }
+
+    public function testDefProperty()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defProperty('testProperty', '')->end()
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+class testClass
+{
+    public $testProperty;
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
 }

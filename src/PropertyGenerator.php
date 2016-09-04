@@ -90,14 +90,19 @@ class PropertyGenerator extends AbstractGenerator
      */
     public function code(int $indentation = 0) : string
     {
-        $this->generatedCode .= $this->indentation($indentation)
-            .$this->visibility
-            .' '
-            .($this->isStatic ? 'static ' : '')
-            .'$'
-            .$this->name
-            .';';
+        $code = $this->indentation($indentation)
+            . $this->visibility
+            . ' '
+            . ($this->isStatic ? 'static ' : '')
+            . '$'
+            . $this->name
+            . ';';
 
-        return $this->generatedCode;
+        // Add comments
+        if (array_key_exists(CommentsGenerator::class, $this->generatedCode)) {
+            $code = $this->generatedCode[CommentsGenerator::class] . "\n" . $code;
+        }
+
+        return $code;
     }
 }

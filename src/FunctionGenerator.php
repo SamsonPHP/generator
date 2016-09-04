@@ -64,15 +64,21 @@ class FunctionGenerator extends AbstractGenerator
             $this->buildDefinition() . '(' . $this->buildArguments($this->arguments) . ')',
             '{'
         ];
+
         // Prepend inner indentation to code
         foreach ($this->code as $codeLine) {
             $formattedCode[] = $innerIndentation.$codeLine;
         }
         $formattedCode[] = '}';
 
-        $this->generatedCode .= implode("\n".$this->indentation($indentation), $formattedCode);
+        $code = implode("\n" . $this->indentation($indentation), $formattedCode);
 
-        return $this->generatedCode;
+        // Add comments
+        if (array_key_exists(FunctionCommentsGenerator::class, $this->generatedCode)) {
+            $code = $this->generatedCode[FunctionCommentsGenerator::class] . "\n" . $code;
+        }
+
+        return $code;
     }
 
     /**

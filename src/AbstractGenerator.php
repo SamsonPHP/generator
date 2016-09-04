@@ -15,8 +15,8 @@ abstract class AbstractGenerator
     /** @var GenericGenerator Parent class generator */
     protected $parent;
 
-    /** @var string Generated code */
-    protected $generatedCode;
+    /** @var array Generated code grouped by generator class name */
+    protected $generatedCode = [];
 
     /** @var int Indentation level */
     protected $indentation = 0;
@@ -38,8 +38,14 @@ abstract class AbstractGenerator
      */
     public function end() : AbstractGenerator
     {
+        // Create array item
+        $class = get_class($this);
+        if (!array_key_exists($class, $this->parent->generatedCode)) {
+            $this->parent->generatedCode[$class] = '';
+        }
+
         // Pass generated code to parent
-        $this->parent->generatedCode .= $this->code($this->indentation)."\n";
+        $this->parent->generatedCode[$class] .= $this->code($this->indentation);
 
         return $this->parent;
     }
@@ -72,6 +78,6 @@ abstract class AbstractGenerator
      */
     protected function indentation(int $indentation = 0) : string
     {
-        return implode('', $indentation > 0 ? array_fill(0, $indentation, ' ') : []);
+        return implode('', $indentation > 0 ? array_fill(0, $indentation, '    ') : []);
     }
 }

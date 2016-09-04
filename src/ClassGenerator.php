@@ -223,8 +223,13 @@ class ClassGenerator extends AbstractGenerator
             $formattedCode[] = '';
         }
 
+        // Add comments
+        if (array_key_exists(CommentsGenerator::class, $this->generatedCode)) {
+            $formattedCode[] = $this->generatedCode[CommentsGenerator::class];
+        }
+
         // Add previously generated code
-        $formattedCode[] = $this->generatedCode . $this->buildDefinition();
+        $formattedCode[] = $this->buildDefinition();
         $formattedCode[] = '{';
 
         // Prepend file description if present
@@ -232,11 +237,16 @@ class ClassGenerator extends AbstractGenerator
             array_unshift($formattedCode, $this->fileDescription);
         }
 
+        // Add properties
+        if (array_key_exists(PropertyGenerator::class, $this->generatedCode)) {
+            $formattedCode[] = $this->indentation($indentation + 1) . $this->generatedCode[PropertyGenerator::class];
+        }
+
         $formattedCode[] = '}';
 
-        $this->generatedCode = implode("\n" . $this->indentation($indentation), $formattedCode);
+        $code = implode("\n" . $this->indentation($indentation), $formattedCode);
 
-        return $this->generatedCode;
+        return $code;
     }
 
     /**
