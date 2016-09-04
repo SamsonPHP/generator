@@ -40,6 +40,62 @@ PHP;
         static::assertEquals($expected, $generated);
     }
 
+    public function testDefFinal()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defFinal()
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+final class testClass
+{
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testDefAbstract()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defAbstract()
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+abstract class testClass
+{
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testDefAbstractFinal()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defAbstract()
+            ->defFinal();
+    }
+
+    public function testDefFinalAbstract()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defFinal()
+            ->defAbstract();
+    }
+
     public function testDefComment()
     {
         $generated = $this->classGenerator
