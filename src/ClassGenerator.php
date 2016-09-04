@@ -162,41 +162,50 @@ class ClassGenerator extends AbstractGenerator
     /**
      * Set class property.
      *
-     * @param string $name  Property name
-     * @param string $type  Property type
-     * @param mixed  $value Property value
+     * @param string $name        Property name
+     * @param string $type        Property type
+     * @param mixed  $value       Property value
+     * @param string $description Property description
      *
      * @return PropertyGenerator
      */
-    public function defProperty(string $name, string $type, $value) : PropertyGenerator
+    public function defProperty(string $name, string $type, $value, string $description = null) : PropertyGenerator
     {
-        return (new PropertyGenerator($name, $value, $this))->increaseIndentation()->defComment()->defVar($name, $type)->end();
+        return (new PropertyGenerator($name, $value, $this))
+            ->increaseIndentation()
+            ->defComment()
+            ->defVar($type, $description)
+            ->end();
     }
 
     /**
      * Set protected static class property.
      *
-     * @param string $name Property name
-     * @param mixed $value Property value
+     * @param string $name        Property name
+     * @param string $type        Property type
+     * @param mixed  $value       Property value
+     * @param string $description Property description
      *
      * @return PropertyGenerator
      */
-    public function defProtectedStaticProperty(string $name, $value) : PropertyGenerator
+    public function defProtectedStaticProperty(string $name, string $type, $value, string $description = null) : PropertyGenerator
     {
-        return $this->defStaticProperty($name, $value)->defProtected();
+        return $this->defStaticProperty($name, $type, $value, $description)->defProtected();
     }
 
     /**
      * Set static class property.
      *
-     * @param string $name Property name
-     * @param mixed $value Property value
+     * @param string $name        Property name
+     * @param string $type        Property type
+     * @param mixed  $value       Property value
+     * @param string $description Property description
      *
      * @return PropertyGenerator
      */
-    public function defStaticProperty(string $name, $value) : PropertyGenerator
+    public function defStaticProperty(string $name, string $type, $value, string $description = null) : PropertyGenerator
     {
-        return $this->defProperty($name, $value)->defStatic();
+        return $this->defProperty($name, $type, $value, $description)->defStatic();
     }
 
     /**

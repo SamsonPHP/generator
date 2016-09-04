@@ -174,6 +174,27 @@ namespace testname\space;
 
 class testClass
 {
+    /** @var TestType */
+    public $testProperty;
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testDefPropertyWithDescription()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defProperty('testProperty', 'TestType', '', 'Property description')->end()
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+class testClass
+{
+    /** @var TestType Property description */
     public $testProperty;
 }
 PHP;
