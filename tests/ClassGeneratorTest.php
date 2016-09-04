@@ -40,6 +40,31 @@ PHP;
         static::assertEquals($expected, $generated);
     }
 
+    public function testDefComment()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defComment()
+            ->defLine('Test comment')
+            ->defMethod('testMethod', 'TestType')
+            ->end()
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+/**
+ * Test comment
+ * @method TestType testMethod()
+ */
+class testClass
+{
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
     public function testDefDescription()
     {
         $generated = $this->classGenerator

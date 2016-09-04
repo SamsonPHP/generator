@@ -28,10 +28,7 @@ class ClassGenerator extends AbstractGenerator
     protected $namespace;
 
     /** @var array Collection of class uses */
-    protected $uses;
-
-    /** @var array Multiline class comment */
-    protected $classComment;
+    protected $uses = [];
 
     /** @var string Multiline file description */
     protected $fileDescription;
@@ -211,12 +208,24 @@ class ClassGenerator extends AbstractGenerator
             throw new \InvalidArgumentException('Class namespace should be defined');
         }
 
-        $formattedCode = [
-            'namespace ' . $this->namespace . ';',
-            '', // One empty line after namespace
-            $this->buildDefinition(),
-            '{'
-        ];
+        $formattedCode = ['namespace ' . $this->namespace . ';'];
+
+        // One empty line after namespace
+        $formattedCode[] = '';
+
+        // Add uses
+        foreach ($this->uses as $use) {
+            $formattedCode[] = 'use ' . $use . ';';
+        }
+
+        // One empty line after uses if we have them
+        if (count($this->uses)) {
+            $formattedCode[] = '';
+        }
+
+        // Add previously generated code
+        $formattedCode[] = $this->generatedCode . $this->buildDefinition();
+        $formattedCode[] = '{';
 
         // Prepend file description if present
         if ($this->fileDescription !== null) {
@@ -225,7 +234,7 @@ class ClassGenerator extends AbstractGenerator
 
         $formattedCode[] = '}';
 
-        $this->generatedCode .= implode("\n" . $this->indentation($indentation), $formattedCode);
+        $this->generatedCode = implode("\n" . $this->indentation($indentation), $formattedCode);
 
         return $this->generatedCode;
     }
