@@ -12,8 +12,10 @@ namespace samsonphp\generator;
  */
 class CommentsGenerator extends AbstractGenerator
 {
+    use CodeTrait;
+
     /**
-     * Set @var comment line.
+     * Set var comment line.
      *
      * @param string      $type        Type
      * @param string|null $description Description
@@ -26,17 +28,17 @@ class CommentsGenerator extends AbstractGenerator
     }
 
     /**
-     * Add function code line.
+     * Set param comment line.
      *
-     * @param string $code Code line
+     * @param string      $name        Argument name
+     * @param string      $type        Argument type
+     * @param string|null $description Argument description
      *
-     * @return $this
+     * @return CommentsGenerator
      */
-    public function defLine(string $code)
+    public function defParam(string $name, string $type, string $description = null) : CommentsGenerator
     {
-        $this->code[] = $code;
-
-        return $this;
+        return $this->defLine('@param ' . $type . ' ' . $name . ($description !== null ? ' ' . $description : ''));
     }
 
     /**

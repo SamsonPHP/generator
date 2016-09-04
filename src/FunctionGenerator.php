@@ -12,6 +12,8 @@ namespace samsonphp\generator;
  */
 class FunctionGenerator extends AbstractGenerator
 {
+    use CodeTrait;
+    
     /** @var string Function name */
     protected $name;
 
@@ -97,19 +99,5 @@ class FunctionGenerator extends AbstractGenerator
         }
 
         return implode(', ', $argumentsString);
-    }
-
-    /**
-     * Add function code line.
-     *
-     * @param string $code Code line
-     *
-     * @return $this
-     */
-    public function defLine(string $code)
-    {
-        $this->code[] = $code;
-
-        return $this;
     }
 }

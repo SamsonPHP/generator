@@ -21,9 +21,6 @@ abstract class AbstractGenerator
     /** @var int Indentation level */
     protected $indentation = 0;
 
-    /** @var array Collection of code lines */
-    protected $code = [];
-
     /**
      * MethodGenerator constructor.
      *
