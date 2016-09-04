@@ -13,7 +13,7 @@ namespace samsonphp\generator;
 class FunctionGenerator extends AbstractGenerator
 {
     use CodeTrait;
-    
+
     /** @var string Function name */
     protected $name;
 
@@ -61,7 +61,7 @@ class FunctionGenerator extends AbstractGenerator
         $innerIndentation = $this->indentation(1);
 
         $formattedCode = [
-            $this->buildDefinition() . '(' . $this->buildArguments() . ')',
+            $this->buildDefinition() . '(' . $this->buildArguments($this->arguments) . ')',
             '{'
         ];
         // Prepend inner indentation to code
@@ -83,21 +83,5 @@ class FunctionGenerator extends AbstractGenerator
     protected function buildDefinition()
     {
         return 'function ' . $this->name;
-    }
-
-    /**
-     * Build function arguments.
-     *
-     * @return string
-     */
-    protected function buildArguments() : string
-    {
-        $argumentsString = [];
-        foreach ($this->arguments as $argumentName => $argumentType) {
-            // Group name with type
-            $argumentsString[] = ($argumentType !== null ? $argumentType . ' ' : '') . '$' . $argumentName;
-        }
-
-        return implode(', ', $argumentsString);
     }
 }

@@ -89,7 +89,7 @@ class MethodGenerator extends FunctionGenerator
     public function code(int $indentation = 0) : string
     {
         if ($this->isAbstract === true) {
-            return $this->buildDefinition() . '(' . $this->buildArguments() . ');';
+            return $this->buildDefinition() . '(' . $this->buildArguments($this->arguments) . ');';
         } else {
             return parent::code($indentation);
         }

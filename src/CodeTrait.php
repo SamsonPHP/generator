@@ -28,4 +28,22 @@ trait CodeTrait
 
         return $this;
     }
+
+    /**
+     * Build arguments list with types.
+     *
+     * @param array $arguments Arguments collection
+     *
+     * @return string Arguments list
+     */
+    protected function buildArguments(array $arguments) : string
+    {
+        $argumentsString = [];
+        foreach ($arguments as $argumentName => $argumentType) {
+            // Group name with type
+            $argumentsString[] = ($argumentType !== null ? $argumentType . ' ' : '') . '$' . $argumentName;
+        }
+
+        return implode(', ', $argumentsString);
+    }
 }

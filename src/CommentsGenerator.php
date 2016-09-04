@@ -38,7 +38,25 @@ class CommentsGenerator extends AbstractGenerator
      */
     public function defParam(string $name, string $type, string $description = null) : CommentsGenerator
     {
-        return $this->defLine('@param ' . $type . ' ' . $name . ($description !== null ? ' ' . $description : ''));
+        return $this->defLine('@param ' . $type . ' $' . $name . ($description !== null ? ' ' . $description : ''));
+    }
+
+    /**
+     * Set method comment line.
+     *
+     * @param string $name       Method name
+     * @param string $returnType Method return type
+     * @param array  $arguments  Method arguments
+     *
+     * @return CommentsGenerator
+     * @internal param null|string $description Argument description
+     *
+     */
+    public function defMethod(string $name, string $returnType, array $arguments = []) : CommentsGenerator
+    {
+
+
+        return $this->defLine('@method ' . $returnType . ' ' . $name . '(' . $this->buildArguments($arguments) . ')');
     }
 
     /**

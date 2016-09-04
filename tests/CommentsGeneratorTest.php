@@ -82,4 +82,55 @@ PHP;
 
         static::assertEquals($expected, $generated);
     }
+
+    public function testParamComment()
+    {
+        $generated = $this->generator
+            ->defLine('Test comment')
+            ->defParam('testName', 'testType', 'Test description')
+            ->code();
+
+        $expected = <<<'PHP'
+/**
+ * Test comment
+ * @param testType $testName Test description
+ */
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testMethodComment()
+    {
+        $generated = $this->generator
+            ->defLine('Test comment')
+            ->defMethod('testMethod', 'testType')
+            ->code();
+
+        $expected = <<<'PHP'
+/**
+ * Test comment
+ * @method testType testMethod()
+ */
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testMethodWithArgumentsComment()
+    {
+        $generated = $this->generator
+            ->defLine('Test comment')
+            ->defMethod('testMethod', 'testType', ['testArgument' => 'TestType'])
+            ->code();
+
+        $expected = <<<'PHP'
+/**
+ * Test comment
+ * @method testType testMethod(TestType $testArgument)
+ */
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
 }
