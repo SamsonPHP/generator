@@ -9,6 +9,7 @@ namespace samsonphp\generator;
  * Class method generation class.
  *
  * @author Vitaly Egorov <egorov@samsonos.com>
+ * @method MethodGenerator defLine(string $code);
  */
 class MethodGenerator extends FunctionGenerator
 {
@@ -40,6 +41,7 @@ class MethodGenerator extends FunctionGenerator
      * Set method to be final.
      *
      * @return MethodGenerator
+     * @throws \InvalidArgumentException
      */
     public function defFinal() : MethodGenerator
     {
@@ -56,6 +58,7 @@ class MethodGenerator extends FunctionGenerator
      * Set method to be abstract.
      *
      * @return MethodGenerator
+     * @throws \InvalidArgumentException
      */
     public function defAbstract() : MethodGenerator
     {
@@ -70,6 +73,7 @@ class MethodGenerator extends FunctionGenerator
 
     /**
      * {@inheritdoc}
+     * @throws \InvalidArgumentException
      */
     public function defLine(string $code) : AbstractGenerator
     {
