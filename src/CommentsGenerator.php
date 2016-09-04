@@ -28,7 +28,7 @@ class CommentsGenerator extends AbstractGenerator
     /**
      * {@inheritdoc}
      */
-    public function code($indentation = 0) : string
+    public function code(int $indentation = 0) : string
     {
         $indentationString = $this->indentation($indentation);
 

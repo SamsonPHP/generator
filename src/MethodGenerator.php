@@ -25,19 +25,6 @@ class MethodGenerator extends FunctionGenerator
     protected $visibility = ClassGenerator::VISIBILITY_PUBLIC;
 
     /**
-     * Build function definition.
-     *
-     * @return string Function definition
-     */
-    protected function buildDefinition()
-    {
-        return ($this->isFinal ? 'final ' : '').
-            ($this->isAbstract ? 'abstract ' : '').
-            ($this->isStatic ? 'static ' : '').
-            'function '.$this->name.'()';
-    }
-
-    /**
      * Set method to be static.
      *
      * @return MethodGenerator
@@ -79,5 +66,43 @@ class MethodGenerator extends FunctionGenerator
         $this->isAbstract = true;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function defLine(string $code) : AbstractGenerator
+    {
+        if ($this->isAbstract === true) {
+            throw new \InvalidArgumentException('Abstract class cannot have code');
+        }
+
+        return parent::defLine($code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function code(int $indentation = 0) : string
+    {
+        if ($this->isAbstract === true) {
+            return $this->buildDefinition() . ';';
+        } else {
+            return parent::code($indentation);
+        }
+    }
+
+    /**
+     * Build function definition.
+     *
+     * @return string Function definition
+     */
+    protected function buildDefinition()
+    {
+        return ($this->isFinal ? 'final ' : '') .
+        ($this->isAbstract ? 'abstract ' : '') .
+        $this->visibility . ' ' .
+        ($this->isStatic ? 'static ' : '') .
+        'function ' . $this->name . '()';
     }
 }

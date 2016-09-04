@@ -60,10 +60,10 @@ class ClassGenerator extends GenericGenerator
     /**
      * ClassGenerator constructor.
      *
-     * @param GenericGenerator $parent Parent generator
      * @param string           $className Class name
+     * @param GenericGenerator $parent    Parent generator
      */
-    public function __construct(GenericGenerator $parent, string $className)
+    public function __construct(string $className, GenericGenerator $parent)
     {
         $this->className = $className;
 

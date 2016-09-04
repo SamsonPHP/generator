@@ -48,16 +48,13 @@ abstract class AbstractGenerator
     }
 
     /**
-     * Get indentation string.
+     * Generate code.
      *
      * @param int $indentation Code level
      *
-     * @return string Indentation string
+     * @return string Generated code
      */
-    protected function indentation($indentation = 0) : string
-    {
-        return implode('', $indentation > 0 ? array_fill(0, $indentation, ' ') : []);
-    }
+    abstract public function code(int $indentation = 0) : string;
 
     /**
      * Add function code line.
@@ -84,11 +81,14 @@ abstract class AbstractGenerator
     }
 
     /**
-     * Generate code.
+     * Get indentation string.
      *
      * @param int $indentation Code level
      *
-     * @return string Generated code
+     * @return string Indentation string
      */
-    abstract public function code($indentation = 0) : string;
+    protected function indentation(int $indentation = 0) : string
+    {
+        return implode('', $indentation > 0 ? array_fill(0, $indentation, ' ') : []);
+    }
 }

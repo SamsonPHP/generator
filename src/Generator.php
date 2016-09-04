@@ -2,6 +2,11 @@
 //[PHPCOMPRESSOR(remove,start)]
 namespace samsonphp\generator;
 
+/**
+ * PHP code generator.
+ * @deprecated Use other separate generators.
+ * @author     Vitaly Egorov <egorov@samsonos.com>
+ */
 class Generator
 {
     /** Single quote for string value **/
@@ -27,32 +32,30 @@ class Generator
     public $ifConditionLevel = 0;
 
     /**
-     * Add simple text to current code position
-     * @param string $text Text to add
-     * @return self
+     * Constructor
+     *
+     * @param string $namespace Code namespace
      */
-    public function text($text = '')
+    public function __construct($namespace = null)
     {
-        $this->code .= $text;
-
-        return $this;
+        // If namespace is defined - set it
+        if (isset($namespace)) {
+            $this->defNamespace($namespace);
+        }
     }
 
     /**
-     * Add current tabbing level to current line.
+     * Add namespace declaration.
      *
-     * @param string $endText Text to add after tabs
-     * @param integer $tabs Amount of tabs to add
-     * @param string $startText Text to add before tabs
-     * @return Generator Chaining
+     * @param string $name Namespace name
+     *
+     * @return $this Chaining
      */
-    public function tabs($endText = '', $tabs = null, $startText = '')
+    public function defNamespace($name)
     {
-        // Generate tabs array
-        $tabs = isset($tabs) && $tabs > 0 ? array_fill(0, $tabs, "\t") : array();
-
-        // Add necessary amount of tabs to line and append text
-        $this->text($startText.implode('', $tabs) . $endText);
+        if ($name !== '' && $name !== null) {
+            $this->newLine('namespace ' . $name . ';')->newLine();
+        }
 
         return $this;
     }
@@ -86,6 +89,16 @@ class Generator
     }
 
     /**
+     * Add single line comment to code
+     * @param string $text Comment text
+     * @return self Chaining
+     */
+    public function comment($text = '')
+    {
+        return isset($text{0}) ? $this->newLine("// " . $text) : $this;
+    }
+
+    /**
      * Add new line to code.
      *
      * @param string $text Code to add to new line
@@ -103,43 +116,35 @@ class Generator
     }
 
     /**
-     * Add single line comment to code
-     * @param string $text Comment text
-     * @return self Chaining
+     * Add current tabbing level to current line.
+     *
+     * @param string  $endText   Text to add after tabs
+     * @param integer $tabs      Amount of tabs to add
+     * @param string  $startText Text to add before tabs
+     *
+     * @return Generator Chaining
      */
-    public function comment($text = '')
+    public function tabs($endText = '', $tabs = null, $startText = '')
     {
-        return isset($text{0}) ? $this->newLine("// " . $text) : $this;
+        // Generate tabs array
+        $tabs = isset($tabs) && $tabs > 0 ? array_fill(0, $tabs, "\t") : array();
+
+        // Add necessary amount of tabs to line and append text
+        $this->text($startText . implode('', $tabs) . $endText);
+
+        return $this;
     }
 
     /**
-     * Add multi-line comment. If array with one line is passed
-     * we create special syntax comment in one line, usually
-     * used for class variable definition in more compact form.
+     * Add simple text to current code position
      *
-     * @param array $lines Array of comments lines
-     * @return self Chaining
+     * @param string $text Text to add
+     *
+     * @return self
      */
-    public function multiComment(array $lines = array())
+    public function text($text = '')
     {
-        // If array is not empty
-        if (sizeof($lines)) {
-            $this->newLine("/**");
-
-            // Multi-comment with single line
-            if (sizeof($lines) === 1) {
-                $this->text(' '.$lines[0].' */');
-            } else { // Iterate comments lines and if comment line is not empty
-                foreach ($lines as $line) {
-                    if (isset($line{0})) {
-                        $this->newLine(" * " . $line);
-                    }
-                }
-
-                return $this->newLine(" */");
-            }
-
-        }
+        $this->code .= $text;
 
         return $this;
     }
@@ -160,68 +165,33 @@ class Generator
     }
 
     /**
-     * Add string value definition.
+     * Add multi-line comment. If array with one line is passed
+     * we create special syntax comment in one line, usually
+     * used for class variable definition in more compact form.
      *
-     * @param string $value String value to add
-     * @param string $tabs Tabs count
-     * @param string $quote Type of quote
-     * @return self Chaining
+     * @param array $lines Array of comments lines
+     * 
+*@return self Chaining
      */
-    public function stringValue($value, $tabs = null, $quote = self::QUOTE_SINGLE)
+    public function multiComment(array $lines = array())
     {
-        return $this->tabs($quote . $value . $quote, $tabs);
-    }
+        // If array is not empty
+        if (sizeof($lines)) {
+            $this->newLine("/**");
 
-    /**
-     * Generate correct value.
-     *
-     * Metho handles arrays, numerics, strings and constants.
-     *
-     * @param mixed $value Value to put in generated code
-     *
-     * @return $this
-     */
-    protected function defineValue($value) 
-    {
-        // If item value is array - recursion
-        if (is_array($value)) {
-            $this->arrayValue($value);
-        } elseif (is_numeric($value) || is_float($value)) {
-            $this->text($value);
-        } else {
-            try { // Try to evaluate
-                eval('$value2 = '.$value.';');
-                $this->text($value);
-            } catch (\Throwable $e) { // Consider it as a string
-                $this->stringValue($value);
-            }
-        }
-        
-        return $this;
-    }
+            // Multi-comment with single line
+            if (sizeof($lines) === 1) {
+                $this->text(' ' . $lines[0] . ' */');
+            } else { // Iterate comments lines and if comment line is not empty
+                foreach ($lines as $line) {
+                    if (isset($line{0})) {
+                        $this->newLine(" * " . $line);
+                    }
+                }
 
-    /**
-     * Add array values definition.
-     *
-     * @param array $items Array key-value pairs collection
-     * @return self Chaining
-     */
-    public function arrayValue(array $items = array())
-    {
-        if (sizeof($items)) {
-            $this->text('[');
-            $this->tabs++;
-
-            // Iterate array items
-            foreach ($items as $key => $value) {
-                // Start array key definition
-                $this->newLine()->defineValue($key)->text(' => ')->defineValue($value)->text(',');
+                return $this->newLine(" */");
             }
 
-            $this->tabs--;
-            $this->newLine(']');
-        } else {
-            $this->text('[]');
         }
 
         return $this;
@@ -315,6 +285,21 @@ class Generator
     }
 
     /**
+     * Close current class context.
+     *
+     * @return self Chaining
+     */
+    public function endClass()
+    {
+        $this->tabs > 0 ? $this->tabs-- : null;
+
+        // Close class definition
+        return $this->newLine('}')
+            // Add one empty line after class definition
+            ->newLine('');
+    }
+
+    /**
      * Add class definition.
      *
      * @param string $name Class name
@@ -351,21 +336,6 @@ class Generator
         $this->tabs++;
 
         return $this;
-    }
-
-    /**
-     * Close current class context.
-     *
-     * @return self Chaining
-     */
-    public function endClass()
-    {
-        $this->tabs > 0 ? $this->tabs-- : null;
-
-        // Close class definition
-        return $this->newLine('}')
-            // Add one empty line after class definition
-        ->newLine('');
     }
 
     /**
@@ -431,6 +401,19 @@ class Generator
     }
 
     /**
+     * Add class constant definition.
+     *
+     * @param string $name  Constant name
+     * @param string $value Variable default value
+     *
+     * @return self Chaining
+     */
+    public function defClassConst($name, $value)
+    {
+        return $this->defClassVar(strtoupper($name), 'const', $value);
+    }
+
+    /**
      * Add class variable definition.
      *
      * @param string $name Variable name
@@ -445,18 +428,6 @@ class Generator
         }
 
         return $this->defvar($visibility . ' ' . $name, $value)->newLine();
-    }
-
-    /**
-     * Add class constant definition.
-     *
-     * @param string $name Constant name
-     * @param string $value Variable default value
-     * @return self Chaining
-     */
-    public function defClassConst($name, $value)
-    {
-        return $this->defClassVar(strtoupper($name), 'const', $value);
     }
 
     /**
@@ -493,6 +464,16 @@ class Generator
     }
 
     /**
+     * @see self::defClassFunction with public visibility
+     *
+     * @return $this
+     */
+    public function defPublicClassFunction(string $name, array $parameters = [], array $comments = [], $returnType = null)
+    {
+        return $this->defClassFunction($name, 'public', $parameters, $comments, $returnType);
+    }
+
+    /**
      * Add class function definition.
      *
      * @param string $name       Class function name
@@ -516,13 +497,35 @@ class Generator
     }
 
     /**
-     * @see self::defClassFunction with public visibility
+     * Add function definition.
      *
-     * @return $this
+     * @param string $name       Function name
+     * @param array  $parameters Collection of parameters $typeHint => $paramName
+     * @param string $prefix     Function prefix
+     * @param array  $comments   Function multi-line comments
+     * @param string $returnType Function return type PHP7
+     *
+     * @return Generator Chaining
      */
-    public function defPublicClassFunction(string $name, array $parameters = [], array $comments = [], $returnType = null)
+    public function defFunction(string $name, array $parameters = [], string $prefix = '', array $comments = [], string $returnType = null)
     {
-        return $this->defClassFunction($name, 'public', $parameters, $comments, $returnType);
+        // Convert parameters to string
+        $parameterList = array();
+        foreach ($parameters as $type => $parameter) {
+            $parameterList[] = (is_string($type) ? $type . ' ' : '') . $parameter;
+        }
+        $parameterList = sizeof($parameterList) ? implode(', ', $parameterList) : '';
+
+        $this
+            ->newLine('')
+            ->multiComment($comments)
+            ->newLine($prefix . 'function ' . $name . '(' . $parameterList . ')' . ($returnType !== null ? ' : ' . $returnType : ''))
+            ->newLine('{')
+            ->tabs('');
+
+        $this->tabs++;
+
+        return $this;
     }
 
     /**
@@ -559,38 +562,6 @@ class Generator
     }
 
     /**
-     * Add function definition.
-     *
-     * @param string $name       Function name
-     * @param array  $parameters Collection of parameters $typeHint => $paramName
-     * @param string $prefix     Function prefix
-     * @param array  $comments   Function multi-line comments
-     * @param string $returnType Function return type PHP7
-     *
-     * @return Generator Chaining
-     */
-    public function defFunction(string $name, array $parameters = [], string $prefix = '', array $comments = [], string $returnType = null)
-    {
-        // Convert parameters to string
-        $parameterList = array();
-        foreach ($parameters as $type => $parameter) {
-            $parameterList[] = (is_string($type) ? $type.' ' : '') . $parameter;
-        }
-        $parameterList = sizeof($parameterList) ? implode(', ', $parameterList) : '';
-
-        $this
-            ->newLine('')
-            ->multiComment($comments)
-            ->newLine($prefix.'function ' . $name . '('.$parameterList.')' . ($returnType  !== null ? ' : ' . $returnType : ''))
-            ->newLine('{')
-            ->tabs('');
-
-        $this->tabs++;
-
-        return $this;
-    }
-
-    /**
      * Close current function context.
      *
      * @return self Chaining
@@ -603,31 +574,73 @@ class Generator
     }
 
     /**
-     * Constructor
-     * @param string $namespace Code namespace
-     */
-    public function __construct($namespace = null)
-    {
-        // If namespace is defined - set it
-        if (isset($namespace)) {
-            $this->defNamespace($namespace);
-        }
-    }
-
-    /**
-     * Add namespace declaration.
+     * Generate correct value.
      *
-     * @param string $name Namespace name
+     * Metho handles arrays, numerics, strings and constants.
      *
-     * @return $this Chaining
+     * @param mixed $value Value to put in generated code
+     *
+     * @return $this
      */
-    public function defNamespace($name)
+    protected function defineValue($value)
     {
-        if ($name !== '' && $name !== null) {
-            $this->newLine('namespace ' . $name . ';')->newLine();
+        // If item value is array - recursion
+        if (is_array($value)) {
+            $this->arrayValue($value);
+        } elseif (is_numeric($value) || is_float($value)) {
+            $this->text($value);
+        } else {
+            try { // Try to evaluate
+                eval('$value2 = ' . $value . ';');
+                $this->text($value);
+            } catch (\Throwable $e) { // Consider it as a string
+                $this->stringValue($value);
+            }
         }
 
         return $this;
+    }
+
+    /**
+     * Add array values definition.
+     *
+     * @param array $items Array key-value pairs collection
+     *
+     * @return self Chaining
+     */
+    public function arrayValue(array $items = array())
+    {
+        if (sizeof($items)) {
+            $this->text('[');
+            $this->tabs++;
+
+            // Iterate array items
+            foreach ($items as $key => $value) {
+                // Start array key definition
+                $this->newLine()->defineValue($key)->text(' => ')->defineValue($value)->text(',');
+            }
+
+            $this->tabs--;
+            $this->newLine(']');
+        } else {
+            $this->text('[]');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add string value definition.
+     *
+     * @param string $value String value to add
+     * @param string $tabs  Tabs count
+     * @param string $quote Type of quote
+     *
+     * @return self Chaining
+     */
+    public function stringValue($value, $tabs = null, $quote = self::QUOTE_SINGLE)
+    {
+        return $this->tabs($quote . $value . $quote, $tabs);
     }
 }
 //[PHPCOMPRESSOR(remove,end)]

@@ -29,19 +29,9 @@ class FunctionGenerator extends AbstractGenerator
     }
 
     /**
-     * Build function definition.
-     *
-     * @return string Function definition
-     */
-    protected function buildDefinition()
-    {
-        return 'function '.$this->name.'()';
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function code($indentation = 0) : string
+    public function code(int $indentation = 0) : string
     {
         $innerIndentation = $this->indentation(1);
 
@@ -58,5 +48,15 @@ class FunctionGenerator extends AbstractGenerator
         $this->generatedCode .= implode("\n".$this->indentation($indentation), $formattedCode);
 
         return $this->generatedCode;
+    }
+
+    /**
+     * Build function definition.
+     *
+     * @return string Function definition
+     */
+    protected function buildDefinition()
+    {
+        return 'function ' . $this->name . '()';
     }
 }

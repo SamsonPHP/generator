@@ -26,21 +26,9 @@ class GenericGenerator extends AbstractGenerator
      *
      * @return FunctionGenerator New function generator instance
      */
-    public function defFunction(string $name, bool $isStatic = false) : FunctionGenerator
+    public function defFunction(string $name) : FunctionGenerator
     {
-        return $this->functions[] = new FunctionGenerator($this, $name, $isStatic);
-    }
-
-    /**
-     * Set static function.
-     *
-     * @param string $name Function
-     *
-     * @return FunctionGenerator New function generator instance
-     */
-    public function defStaticFunction(string $name) : FunctionGenerator
-    {
-        return $this->defFunction($name, false);
+        return $this->functions[] = new FunctionGenerator($name, $this);
     }
 
     /**
@@ -62,7 +50,7 @@ class GenericGenerator extends AbstractGenerator
      *
      * @return string Generated code
      */
-    public function code($indentation = 0) : string
+    public function code(int $indentation = 0) : string
     {
         foreach ($this->classes as $classGenerator) {
             $this->code[] = $classGenerator->code($indentation);

@@ -88,7 +88,7 @@ class PropertyGenerator extends AbstractGenerator
     /**
      * {@inheritdoc}
      */
-    public function code($indentation = 0) : string
+    public function code(int $indentation = 0) : string
     {
         $this->generatedCode .= $this->indentation($indentation)
             .$this->visibility
