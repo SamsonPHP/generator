@@ -12,6 +12,8 @@ namespace samsonphp\generator;
  */
 class MethodGenerator extends FunctionGenerator
 {
+    use VisibilityTrait;
+    
     /** @var bool Flag that method is static */
     protected $isStatic = false;
 

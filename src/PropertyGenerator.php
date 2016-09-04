@@ -12,6 +12,8 @@ namespace samsonphp\generator;
  */
 class PropertyGenerator extends AbstractGenerator
 {
+    use VisibilityTrait;
+
     /** @var string Property name */
     protected $name;
 
@@ -20,9 +22,6 @@ class PropertyGenerator extends AbstractGenerator
 
     /** @var bool Flag that method is static */
     protected $isStatic = false;
-
-    /** @var string Method visibility */
-    protected $visibility = ClassGenerator::VISIBILITY_PUBLIC;
 
     /**
      * PropertyGenerator constructor.
@@ -37,40 +36,6 @@ class PropertyGenerator extends AbstractGenerator
         $this->value = $value;
 
         parent::__construct($parent);
-    }
-
-    /**
-     * Set protected property visibility.
-     *
-     * @return PropertyGenerator
-     */
-    public function defProtected() : PropertyGenerator
-    {
-        return $this->defVisibility(ClassGenerator::VISIBILITY_PROTECTED);
-    }
-
-    /**
-     * Set property visibility.
-     *
-     * @param string $visibility Property visibility
-     *
-     * @return PropertyGenerator
-     */
-    protected function defVisibility(string $visibility) : PropertyGenerator
-    {
-        $this->visibility = $visibility;
-
-        return $this;
-    }
-
-    /**
-     * Set private property visibility.
-     *
-     * @return PropertyGenerator
-     */
-    public function defPrivate() : PropertyGenerator
-    {
-        return $this->defVisibility(ClassGenerator::VISIBILITY_PRIVATE);
     }
 
     /**

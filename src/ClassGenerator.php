@@ -211,6 +211,54 @@ class ClassGenerator extends AbstractGenerator
     }
 
     /**
+     * Set protected class method.
+     *
+     * @param string $name Method name
+     *
+     * @return MethodGenerator
+     */
+    public function defProtectedMethod(string $name) : MethodGenerator
+    {
+        return $this->defMethod($name);
+    }
+
+    /**
+     * Set public class method.
+     *
+     * @param string $name Method name
+     *
+     * @return MethodGenerator
+     */
+    public function defMethod(string $name) : MethodGenerator
+    {
+        return new MethodGenerator($name, $this);
+    }
+
+    /**
+     * Set protected static class method.
+     *
+     * @param string $name Method name
+     *
+     * @return MethodGenerator
+     */
+    public function defProtectedStaticMethod(string $name) : MethodGenerator
+    {
+        return $this->defStaticMethod($name)->defProtected();
+    }
+
+    /**
+     * Set public static class method.
+     *
+     * @param string $name Method name
+     *
+     * @return MethodGenerator
+     */
+    public function defStaticMethod(string $name) : MethodGenerator
+    {
+        return $this->defMethod($name)->defStatic();
+    }
+
+    /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
      */
