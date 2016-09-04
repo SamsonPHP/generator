@@ -166,7 +166,7 @@ PHP;
     {
         $generated = $this->classGenerator
             ->defNamespace('testname\space')
-            ->defProperty('testProperty', '')->end()
+            ->defProperty('testProperty', 'TestType', '')->end()
             ->code();
 
         $expected = <<<'PHP'

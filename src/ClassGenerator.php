@@ -162,14 +162,15 @@ class ClassGenerator extends AbstractGenerator
     /**
      * Set class property.
      *
-     * @param string $name Property name
-     * @param mixed $value Property value
+     * @param string $name  Property name
+     * @param string $type  Property type
+     * @param mixed  $value Property value
      *
      * @return PropertyGenerator
      */
-    public function defProperty(string $name, $value) : PropertyGenerator
+    public function defProperty(string $name, string $type, $value) : PropertyGenerator
     {
-        return new PropertyGenerator($name, $value, $this);
+        return (new PropertyGenerator($name, $value, $this))->increaseIndentation()->defComment()->defVar($name, $type)->end();
     }
 
     /**

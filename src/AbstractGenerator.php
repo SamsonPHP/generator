@@ -32,6 +32,30 @@ abstract class AbstractGenerator
     }
 
     /**
+     * Decrease indentation.
+     *
+     * @return $this
+     */
+    public function decreaseIndentation() : AbstractGenerator
+    {
+        $this->indentation--;
+
+        return $this;
+    }
+
+    /**
+     * Increase indentation.
+     *
+     * @return $this
+     */
+    public function increaseIndentation() : AbstractGenerator
+    {
+        $this->indentation++;
+
+        return $this;
+    }
+
+    /**
      * Close current generator and return parent.
      *
      * @return AbstractGenerator Parent
