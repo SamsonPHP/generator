@@ -61,9 +61,9 @@ abstract class AbstractGenerator
      *
      * @param string $code Code line
      *
-     * @return AbstractGenerator
+     * @return $this
      */
-    public function defLine(string $code) : AbstractGenerator
+    public function defLine(string $code)
     {
         $this->code[] = $code;
 

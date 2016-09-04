@@ -9,7 +9,6 @@ namespace samsonphp\generator;
  * Class method generation class.
  *
  * @author Vitaly Egorov <egorov@samsonos.com>
- * @method MethodGenerator defLine(string $code);
  */
 class MethodGenerator extends FunctionGenerator
 {
@@ -75,7 +74,7 @@ class MethodGenerator extends FunctionGenerator
      * {@inheritdoc}
      * @throws \InvalidArgumentException
      */
-    public function defLine(string $code) : AbstractGenerator
+    public function defLine(string $code)
     {
         if ($this->isAbstract === true) {
             throw new \InvalidArgumentException('Abstract class cannot have code');
