@@ -42,6 +42,19 @@ class CommentsGenerator extends AbstractGenerator
     }
 
     /**
+     * Set return comment line.
+     *
+     * @param string      $type        Return type
+     * @param string|null $description Return description
+     *
+     * @return CommentsGenerator
+     */
+    public function defReturn(string $type, string $description = null) : CommentsGenerator
+    {
+        return $this->defLine('@return ' . $type . ($description !== null ? ' ' . $description : ''));
+    }
+
+    /**
      * Set method comment line.
      *
      * @param string $name       Method name
@@ -54,8 +67,6 @@ class CommentsGenerator extends AbstractGenerator
      */
     public function defMethod(string $name, string $returnType, array $arguments = []) : CommentsGenerator
     {
-
-
         return $this->defLine('@method ' . $returnType . ' ' . $name . '(' . $this->buildArguments($arguments) . ')');
     }
 

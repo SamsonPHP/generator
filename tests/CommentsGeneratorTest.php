@@ -100,6 +100,23 @@ PHP;
         static::assertEquals($expected, $generated);
     }
 
+    public function testReturnComment()
+    {
+        $generated = $this->generator
+            ->defLine('Test comment')
+            ->defReturn('ReturnType', 'Return description')
+            ->code();
+
+        $expected = <<<'PHP'
+/**
+ * Test comment
+ * @return ReturnType Return description
+ */
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
     public function testMethodComment()
     {
         $generated = $this->generator
