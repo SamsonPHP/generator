@@ -10,7 +10,7 @@ namespace samsonphp\generator;
  *
  * @author Vitaly Egorov <egorov@samsonos.com>
  */
-class ClassGenerator extends GenericGenerator
+class ClassGenerator extends AbstractGenerator
 {
     /** OOP public visibility */
     const VISIBILITY_PUBLIC = 'public';
@@ -33,7 +33,7 @@ class ClassGenerator extends GenericGenerator
     /** @var array Multiline class comment */
     protected $classComment;
 
-    /** @var array Multiline file description */
+    /** @var string Multiline file description */
     protected $fileDescription;
 
     /** @var array Class constants */
@@ -63,7 +63,7 @@ class ClassGenerator extends GenericGenerator
      * @param string           $className Class name
      * @param GenericGenerator $parent    Parent generator
      */
-    public function __construct(string $className, GenericGenerator $parent)
+    public function __construct(string $className, GenericGenerator $parent = null)
     {
         $this->className = $className;
 
@@ -105,13 +105,18 @@ class ClassGenerator extends GenericGenerator
     /**
      * Set class file description.
      *
-     * @param string $description
+     * @param array $description Collection of class file description lines
      *
      * @return ClassGenerator
      */
-    public function defDescription(string $description) : ClassGenerator
+    public function defDescription(array $description) : ClassGenerator
     {
-        $this->fileDescription = $description;
+        $commentsGenerator = new CommentsGenerator($this);
+        foreach ($description as $line) {
+            $commentsGenerator->defLine($line);
+        }
+
+        $this->fileDescription = $commentsGenerator->code();
 
         return $this;
     }
@@ -194,5 +199,47 @@ class ClassGenerator extends GenericGenerator
     public function defStaticProperty(string $name, $value) : PropertyGenerator
     {
         return $this->defProperty($name, $value)->defStatic();
+    }
+
+    /**
+     * {@inheritdoc}
+     * @throws \InvalidArgumentException
+     */
+    public function code(int $indentation = 0) : string
+    {
+        if ($this->namespace === null) {
+            throw new \InvalidArgumentException('Class namespace should be defined');
+        }
+
+        $formattedCode = [
+            'namespace ' . $this->namespace . ';',
+            '', // One empty line after namespace
+            $this->buildDefinition(),
+            '{'
+        ];
+
+        // Prepend file description if present
+        if ($this->fileDescription !== null) {
+            array_unshift($formattedCode, $this->fileDescription);
+        }
+
+        $formattedCode[] = '}';
+
+        $this->generatedCode .= implode("\n" . $this->indentation($indentation), $formattedCode);
+
+        return $this->generatedCode;
+    }
+
+    /**
+     * Build function definition.
+     *
+     * @return string Function definition
+     */
+    protected function buildDefinition()
+    {
+        return ($this->isFinal ? 'final ' : '') .
+        ($this->isAbstract ? 'abstract ' : '') .
+        'class ' .
+        $this->className;
     }
 }

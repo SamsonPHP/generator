@@ -52,14 +52,6 @@ class GenericGenerator extends AbstractGenerator
      */
     public function code(int $indentation = 0) : string
     {
-        foreach ($this->classes as $classGenerator) {
-            $this->code[] = $classGenerator->code($indentation);
-        }
-
-        foreach ($this->functions as $functionGenerator) {
-            $this->code[] = $functionGenerator->code($indentation);
-        }
-
         return implode("\n".$this->indentation($indentation), $this->code);
     }
 }
