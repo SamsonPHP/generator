@@ -15,12 +15,27 @@ trait VisibilityTrait
     /** @var string Method visibility */
     protected $visibility = ClassGenerator::VISIBILITY_PUBLIC;
 
+    /** @var bool Flag that method is static */
+    protected $isStatic = false;
+
+    /**
+     * Set method to be static.
+     *
+     * @return $this
+     */
+    public function defStatic()
+    {
+        $this->isStatic = true;
+
+        return $this;
+    }
+
     /**
      * Set protected property visibility.
      *
-     * @return PropertyGenerator
+     * @return $this
      */
-    public function defProtected() : PropertyGenerator
+    public function defProtected()
     {
         return $this->defVisibility(ClassGenerator::VISIBILITY_PROTECTED);
     }
@@ -30,9 +45,9 @@ trait VisibilityTrait
      *
      * @param string $visibility Property visibility
      *
-     * @return PropertyGenerator
+     * @return $this
      */
-    protected function defVisibility(string $visibility) : PropertyGenerator
+    protected function defVisibility(string $visibility)
     {
         $this->visibility = $visibility;
 
@@ -42,9 +57,9 @@ trait VisibilityTrait
     /**
      * Set private property visibility.
      *
-     * @return PropertyGenerator
+     * @return $this
      */
-    public function defPrivate() : PropertyGenerator
+    public function defPrivate()
     {
         return $this->defVisibility(ClassGenerator::VISIBILITY_PRIVATE);
     }

@@ -13,64 +13,7 @@ namespace samsonphp\generator;
 class MethodGenerator extends FunctionGenerator
 {
     use VisibilityTrait;
-    
-    /** @var bool Flag that method is static */
-    protected $isStatic = false;
-
-    /** @var bool Flag that method is abstract */
-    protected $isAbstract = false;
-
-    /** @var bool Flag that method is final */
-    protected $isFinal = false;
-
-    /** @var string Method visibility */
-    protected $visibility = ClassGenerator::VISIBILITY_PUBLIC;
-
-    /**
-     * Set method to be static.
-     *
-     * @return MethodGenerator
-     */
-    public function defStatic() : MethodGenerator
-    {
-        $this->isStatic = true;
-
-        return $this;
-    }
-
-    /**
-     * Set method to be final.
-     *
-     * @return MethodGenerator
-     * @throws \InvalidArgumentException
-     */
-    public function defFinal() : MethodGenerator
-    {
-        if ($this->isAbstract) {
-            throw new \InvalidArgumentException('Method cannot be final as it is already abstract');
-        }
-
-        $this->isFinal = true;
-
-        return $this;
-    }
-
-    /**
-     * Set method to be abstract.
-     *
-     * @return MethodGenerator
-     * @throws \InvalidArgumentException
-     */
-    public function defAbstract() : MethodGenerator
-    {
-        if ($this->isFinal) {
-            throw new \InvalidArgumentException('Method cannot be abstract as it is already final');
-        }
-
-        $this->isAbstract = true;
-
-        return $this;
-    }
+    use AbstractFinalTrait;
 
     /**
      * {@inheritdoc}

@@ -12,6 +12,8 @@ namespace samsonphp\generator;
  */
 class ClassGenerator extends AbstractGenerator
 {
+    use AbstractFinalTrait;
+
     /** OOP public visibility */
     const VISIBILITY_PUBLIC = 'public';
 
@@ -48,12 +50,6 @@ class ClassGenerator extends AbstractGenerator
     /** @var array Class methods */
     protected $methods;
 
-    /** @var bool Flag that class is abstract */
-    protected $isAbstract;
-
-    /** @var bool Flag that class is final */
-    protected $isFinal;
-
     /**
      * ClassGenerator constructor.
      *
@@ -65,38 +61,6 @@ class ClassGenerator extends AbstractGenerator
         $this->className = $className;
 
         parent::__construct($parent);
-    }
-
-    /**
-     * Set class to be final.
-     *
-     * @return ClassGenerator
-     */
-    public function defFinal() : ClassGenerator
-    {
-        if ($this->isAbstract) {
-            throw new \InvalidArgumentException('Class cannot be final as it is already abstract');
-        }
-
-        $this->isFinal = true;
-
-        return $this;
-    }
-
-    /**
-     * Set class to be abstract.
-     *
-     * @return ClassGenerator
-     */
-    public function defAbstract() : ClassGenerator
-    {
-        if ($this->isFinal) {
-            throw new \InvalidArgumentException('Class cannot be abstract as it is already final');
-        }
-
-        $this->isAbstract = true;
-
-        return $this;
     }
 
     /**

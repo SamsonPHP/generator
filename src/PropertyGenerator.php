@@ -20,9 +20,6 @@ class PropertyGenerator extends AbstractGenerator
     /** @var string Property value */
     protected $value;
 
-    /** @var bool Flag that method is static */
-    protected $isStatic = false;
-
     /**
      * PropertyGenerator constructor.
      *
@@ -36,18 +33,6 @@ class PropertyGenerator extends AbstractGenerator
         $this->value = $value;
 
         parent::__construct($parent);
-    }
-
-    /**
-     * Set method to be static.
-     *
-     * @return PropertyGenerator
-     */
-    public function defStatic() : PropertyGenerator
-    {
-        $this->isStatic = true;
-
-        return $this;
     }
 
     /**
