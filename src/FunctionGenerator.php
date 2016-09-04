@@ -9,7 +9,6 @@ namespace samsonphp\generator;
  * Function generation class.
  *
  * @author Vitaly Egorov <egorov@samsonos.com>
- * @method FunctionGenerator defLine(string $code);
  */
 class FunctionGenerator extends AbstractGenerator
 {
@@ -98,5 +97,19 @@ class FunctionGenerator extends AbstractGenerator
         }
 
         return implode(', ', $argumentsString);
+    }
+
+    /**
+     * Add function code line.
+     *
+     * @param string $code Code line
+     *
+     * @return $this
+     */
+    public function defLine(string $code)
+    {
+        $this->code[] = $code;
+
+        return $this;
     }
 }

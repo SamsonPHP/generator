@@ -57,20 +57,6 @@ abstract class AbstractGenerator
     abstract public function code(int $indentation = 0) : string;
 
     /**
-     * Add function code line.
-     *
-     * @param string $code Code line
-     *
-     * @return $this
-     */
-    public function defLine(string $code)
-    {
-        $this->code[] = $code;
-
-        return $this;
-    }
-
-    /**
      * Set Comments block.
      *
      * @return CommentsGenerator Comments block generator

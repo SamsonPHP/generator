@@ -26,6 +26,20 @@ class CommentsGenerator extends AbstractGenerator
     }
 
     /**
+     * Add function code line.
+     *
+     * @param string $code Code line
+     *
+     * @return $this
+     */
+    public function defLine(string $code)
+    {
+        $this->code[] = $code;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function code(int $indentation = 0) : string
