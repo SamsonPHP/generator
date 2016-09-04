@@ -86,7 +86,7 @@ class MethodGenerator extends FunctionGenerator
     public function code(int $indentation = 0) : string
     {
         if ($this->isAbstract === true) {
-            return $this->buildDefinition() . ';';
+            return $this->buildDefinition() . '(' . $this->buildArguments() . ');';
         } else {
             return parent::code($indentation);
         }
@@ -103,6 +103,6 @@ class MethodGenerator extends FunctionGenerator
         ($this->isAbstract ? 'abstract ' : '') .
         $this->visibility . ' ' .
         ($this->isStatic ? 'static ' : '') .
-        'function ' . $this->name . '()';
+        'function ' . $this->name;
     }
 }

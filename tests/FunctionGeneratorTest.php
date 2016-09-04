@@ -60,4 +60,51 @@ PHP;
 
         static::assertEquals($expected, $generated);
     }
+
+    public function testDefFunctionWithArgument()
+    {
+        $code = 'echo(\'test\')';
+        $generated = $this->generator->defArgument('testArgument')->defLine($code)->code();
+        $expected = <<<'PHP'
+function testFunction($testArgument)
+{
+ echo('test')
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testDefFunctionWithTypedArgument()
+    {
+        $code = 'echo(\'test\')';
+        $generated = $this->generator->defArgument('testArgument', 'array')->defLine($code)->code();
+        $expected = <<<'PHP'
+function testFunction(array $testArgument)
+{
+ echo('test')
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testDefFunctionWithMultipleTypedArgument()
+    {
+        $code = 'echo(\'test\')';
+        $generated = $this->generator
+            ->defArgument('testArgument', 'array')
+            ->defArgument('testArgument2')
+            ->defArgument('testArgument3', 'TestType')
+            ->defLine($code)
+            ->code();
+        $expected = <<<'PHP'
+function testFunction(array $testArgument, $testArgument2, TestType $testArgument3)
+{
+ echo('test')
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
 }

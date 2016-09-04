@@ -9,11 +9,18 @@ namespace samsonphp\generator;
  * Function generation class.
  *
  * @author Vitaly Egorov <egorov@samsonos.com>
+ * @method FunctionGenerator defLine(string $code);
  */
 class FunctionGenerator extends AbstractGenerator
 {
     /** @var string Function name */
     protected $name;
+
+    /** @var array Collection of function arguments */
+    protected $arguments = [];
+
+    /** @var array Collection of function arguments descriptions */
+    protected $argumentDescriptions = [];
 
     /**
      * FunctionGenerator constructor.
@@ -29,6 +36,23 @@ class FunctionGenerator extends AbstractGenerator
     }
 
     /**
+     * Set function argument.
+     *
+     * @param string      $name        Argument name
+     * @param string|null $type        Argument type
+     * @param string      $description Argument description
+     *
+     * @return FunctionGenerator
+     */
+    public function defArgument(string $name, string $type = null, string $description = null) : FunctionGenerator
+    {
+        $this->arguments[$name] = $type;
+        $this->argumentDescriptions[$name] = $description;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function code(int $indentation = 0) : string
@@ -36,7 +60,7 @@ class FunctionGenerator extends AbstractGenerator
         $innerIndentation = $this->indentation(1);
 
         $formattedCode = [
-            $this->buildDefinition(),
+            $this->buildDefinition() . '(' . $this->buildArguments() . ')',
             '{'
         ];
         // Prepend inner indentation to code
@@ -51,12 +75,44 @@ class FunctionGenerator extends AbstractGenerator
     }
 
     /**
+     * Build function arguments.
+     *
+     * @return string
+     */
+    protected function buildArguments() : string
+    {
+        $argumentsString = [];
+        foreach ($this->arguments as $argumentName => $argumentType) {
+            // Group name with type
+            $argumentsString[] = ($argumentType !== null ? $argumentType . ' ' : '') . '$' . $argumentName;
+        }
+
+        return implode(', ', $argumentsString);
+    }
+
+    /**
+     * Build function arguments.
+     *
+     * @return string
+     */
+    protected function buildArguments() : string
+    {
+        $argumentsString = [];
+        foreach ($this->arguments as $argumentName => $argumentType) {
+            // Group name with type
+            $argumentsString[] = ($argumentType !== null ? $argumentType . ' ' : '') . '$' . $argumentName;
+        }
+
+        return implode(', ', $argumentsString);
+    }
+
+    /**
      * Build function definition.
      *
      * @return string Function definition
      */
     protected function buildDefinition()
     {
-        return 'function ' . $this->name . '()';
+        return 'function ' . $this->name;
     }
 }
