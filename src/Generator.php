@@ -35,6 +35,8 @@ class Generator
      * Constructor
      *
      * @param string $namespace Code namespace
+     *
+     * @deprecated Use new generators logic
      */
     public function __construct($namespace = null)
     {
@@ -49,6 +51,7 @@ class Generator
      *
      * @param string $name Namespace name
      *
+     * @deprecated Use new generators logic
      * @return $this Chaining
      */
     public function defNamespace($name)
@@ -61,49 +64,13 @@ class Generator
     }
     
     /**
-     * Increase current code indentation.
-     *
-     * @param int $amount Indentation amount
-     *
-     * @return $this Chaining
-     */
-    public function increaseIndentation($amount = 1)
-    {
-        $this->tabs += $amount;
-
-        return $this;
-    }
-
-    /**
-     * Reduce current code indentation.
-     *
-     * @param int $amount Indentation amount
-     *
-     * @return $this Chaining
-     */
-    public function decreaseIndentation($amount = 1)
-    {
-        $this->tabs = $this->tabs > $amount ? $this->tabs - $amount : 0;
-
-        return $this;
-    }
-
-    /**
-     * Add single line comment to code
-     * @param string $text Comment text
-     * @return self Chaining
-     */
-    public function comment($text = '')
-    {
-        return isset($text{0}) ? $this->newLine("// " . $text) : $this;
-    }
-
-    /**
      * Add new line to code.
      *
      * @param string $text Code to add to new line
      * @param integer $tabs Tabs count
-     * @return self
+     * 
+*@return self
+     * @deprecated Use new generators logic
      */
     public function newLine($text = '', $tabs = null)
     {
@@ -123,6 +90,7 @@ class Generator
      * @param string  $startText Text to add before tabs
      *
      * @return Generator Chaining
+     * @deprecated Use new generators logic
      */
     public function tabs($endText = '', $tabs = null, $startText = '')
     {
@@ -141,6 +109,7 @@ class Generator
      * @param string $text Text to add
      *
      * @return self
+     * @deprecated Use new generators logic
      */
     public function text($text = '')
     {
@@ -150,12 +119,59 @@ class Generator
     }
 
     /**
+     * Increase current code indentation.
+     *
+     * @param int $amount Indentation amount
+     *
+     * @deprecated Use new generators logic
+     *
+     * @return $this Chaining
+     */
+    public function increaseIndentation($amount = 1)
+    {
+        $this->tabs += $amount;
+
+        return $this;
+    }
+
+    /**
+     * Reduce current code indentation.
+     *
+     * @param int $amount Indentation amount
+     *
+     * @deprecated Use new generators logic
+     *
+     * @return $this Chaining
+     */
+    public function decreaseIndentation($amount = 1)
+    {
+        $this->tabs = $this->tabs > $amount ? $this->tabs - $amount : 0;
+
+        return $this;
+    }
+
+    /**
+     * Add single line comment to code
+     *
+     * @param string $text Comment text
+     *
+     * @return self Chaining
+     * @deprecated Use new generators logic
+     */
+    public function comment($text = '')
+    {
+        return isset($text{0}) ? $this->newLine("// " . $text) : $this;
+    }
+
+    /**
      * Add one line variable definition comment.
      *
      * @param string $type Variable typeHint
      * @param string $description Variable description
      * @param string $name Variable name
-     * @return self Chaining
+     * 
+*@return self Chaining
+     * @deprecated Use new generators logic
      */
     public function commentVar($type, $description, $name = '')
     {
@@ -170,8 +186,9 @@ class Generator
      * used for class variable definition in more compact form.
      *
      * @param array $lines Array of comments lines
-     * 
-*@return self Chaining
+     *
+     * @deprecated Use new generators logic
+     * @return self Chaining
      */
     public function multiComment(array $lines = array())
     {
@@ -203,7 +220,9 @@ class Generator
      * @param string $name Variable name
      * @param array $value Array of key-value items for merging it to other array
      * @param string $arrayName Name of array to merge to, if no is specified - $name is used
-     * @return self Chaining
+     * 
+*@return self Chaining
+     * @deprecated Use new generators logic
      */
     public function defArrayMerge($name, array $value, $arrayName = null)
     {
@@ -223,7 +242,9 @@ class Generator
      * @param string $after String to insert after variable definition
      * @param string $end Closing part of variable definition
      * @param string $quote Type of quote
-     * @return Generator Chaining
+     * 
+*@return Generator Chaining
+     * @deprecated Use new generators logic
      */
     public function defVar($name, $value = null, $after = ' = ', $end = ';', $quote = self::QUOTE_SINGLE)
     {
@@ -258,10 +279,85 @@ class Generator
     }
 
     /**
+     * Add string value definition.
+     *
+     * @param string $value String value to add
+     * @param string $tabs  Tabs count
+     * @param string $quote Type of quote
+     *
+     * @deprecated Use new generators logic
+     * @return self Chaining
+     */
+    public function stringValue($value, $tabs = null, $quote = self::QUOTE_SINGLE)
+    {
+        return $this->tabs($quote . $value . $quote, $tabs);
+    }
+
+    /**
+     * Add array values definition.
+     *
+     * @param array $items Array key-value pairs collection
+     *
+     * @deprecated Use new generators logic
+     * @return self Chaining
+     */
+    public function arrayValue(array $items = array())
+    {
+        if (sizeof($items)) {
+            $this->text('[');
+            $this->tabs++;
+
+            // Iterate array items
+            foreach ($items as $key => $value) {
+                // Start array key definition
+                $this->newLine()->defineValue($key)->text(' => ')->defineValue($value)->text(',');
+            }
+
+            $this->tabs--;
+            $this->newLine(']');
+        } else {
+            $this->text('[]');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Generate correct value.
+     *
+     * Metho handles arrays, numerics, strings and constants.
+     *
+     * @param mixed $value Value to put in generated code
+     *
+     * @deprecated Use new generators logic
+     * @return $this
+     */
+    protected function defineValue($value)
+    {
+        // If item value is array - recursion
+        if (is_array($value)) {
+            $this->arrayValue($value);
+        } elseif (is_numeric($value) || is_float($value)) {
+            $this->text($value);
+        } else {
+            try { // Try to evaluate
+                eval('$value2 = ' . $value . ';');
+                $this->text($value);
+            } catch (\Throwable $e) { // Consider it as a string
+                $this->stringValue($value);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Add trait definition.
      *
      * @param string $name Trait name
+     *
      * @return self Chaining
+     * @deprecated Use new generators logic
      */
     public function defTrait($name)
     {
@@ -288,6 +384,7 @@ class Generator
      * Close current class context.
      *
      * @return self Chaining
+     * @deprecated Use new generators logic
      */
     public function endClass()
     {
@@ -305,7 +402,9 @@ class Generator
      * @param string $name Class name
      * @param string $extends Parent class name
      * @param array $implements Interfaces names collection
+     *
      * @return self Chaining
+     * @deprecated Use new generators logic
      */
     public function defClass($name, $extends = null, array $implements = array())
     {
@@ -342,7 +441,9 @@ class Generator
      * Define if statement condition.
      *
      * @param string $condition Condition statement
+     *
      * @return self Chaining
+     * @deprecated Use new generators logic
      */
     public function defIfCondition($condition)
     {
@@ -358,7 +459,9 @@ class Generator
      * Define elseif statement condition.
      *
      * @param string $condition Condition statement
+     *
      * @return self Chaining
+     * @deprecated Use new generators logic
      */
     public function defElseIfCondition($condition)
     {
@@ -373,6 +476,7 @@ class Generator
      * Define else statement.
      *
      * @return self Chaining
+     * @deprecated Use new generators logic
      */
     public function defElseCondition()
     {
@@ -387,6 +491,7 @@ class Generator
      * Close if condition statement.
      *
      * @return self Chaining
+     * @deprecated Use new generators logic
      */
     public function endIfCondition()
     {
@@ -407,6 +512,7 @@ class Generator
      * @param string $value Variable default value
      *
      * @return self Chaining
+     * @deprecated Use new generators logic
      */
     public function defClassConst($name, $value)
     {
@@ -419,7 +525,9 @@ class Generator
      * @param string $name Variable name
      * @param string $visibility Variable accessibility level
      * @param mixed $value Variable default value
+     *
      * @return self Chaining
+     * @deprecated Use new generators logic
      */
     public function defClassVar($name, $visibility = 'public', $value = null)
     {
@@ -432,8 +540,11 @@ class Generator
 
     /**
      * Write file to disk
-     * @param string $name Path to file
+     * 
+*@param string       $name   Path to file
      * @param string $format Output file format
+     *
+     *@deprecated Use new generators logic
      */
     public function write($name, $format = 'php')
     {
@@ -450,6 +561,7 @@ class Generator
      * Flush internal data and return it.
      *
      * @return string Current generated code
+     * @deprecated Use new generators logic
      */
     public function flush()
     {
@@ -467,6 +579,7 @@ class Generator
      * @see self::defClassFunction with public visibility
      *
      * @return $this
+     * @deprecated Use new generators logic
      */
     public function defPublicClassFunction(string $name, array $parameters = [], array $comments = [], $returnType = null)
     {
@@ -483,7 +596,7 @@ class Generator
      * @param null   $returnType Class function return type PHP7
      *
      * @return $this
-     *
+     * @deprecated Use new generators logic
      */
     public function defClassFunction(string $name, string $visibility = 'public', array $parameters = [], array $comments = [], $returnType = null)
     {
@@ -506,6 +619,7 @@ class Generator
      * @param string $returnType Function return type PHP7
      *
      * @return Generator Chaining
+     * @deprecated Use new generators logic
      */
     public function defFunction(string $name, array $parameters = [], string $prefix = '', array $comments = [], string $returnType = null)
     {
@@ -532,6 +646,7 @@ class Generator
      * @see self::defClassFunction with private visibility
      *
      * @return $this
+     * @deprecated Use new generators logic
      */
     public function defPrivateClassFunction(string $name, array $parameters = [], array $comments = [], $returnType = null)
     {
@@ -540,7 +655,7 @@ class Generator
 
     /**
      * @see self::defClassFunction with protected visibility
-     *
+     * @deprecated Use new generators logic
      * @return $this
      */
     public function defProtectedClassFunction(string $name, array $parameters = [], array $comments = [], $returnType = null)
@@ -548,10 +663,9 @@ class Generator
         return $this->defClassFunction($name, 'protected', $parameters, $comments, $returnType);
     }
 
-
     /**
      * Close class function definition.
-     *
+     * @deprecated Use new generators logic
      * @return $this Chaining
      */
     public function endClassFunction()
@@ -563,7 +677,7 @@ class Generator
 
     /**
      * Close current function context.
-     *
+     * @deprecated Use new generators logic
      * @return self Chaining
      */
     public function endFunction()
@@ -571,76 +685,6 @@ class Generator
         $this->tabs--;
 
         return $this->newLine('}');
-    }
-
-    /**
-     * Generate correct value.
-     *
-     * Metho handles arrays, numerics, strings and constants.
-     *
-     * @param mixed $value Value to put in generated code
-     *
-     * @return $this
-     */
-    protected function defineValue($value)
-    {
-        // If item value is array - recursion
-        if (is_array($value)) {
-            $this->arrayValue($value);
-        } elseif (is_numeric($value) || is_float($value)) {
-            $this->text($value);
-        } else {
-            try { // Try to evaluate
-                eval('$value2 = ' . $value . ';');
-                $this->text($value);
-            } catch (\Throwable $e) { // Consider it as a string
-                $this->stringValue($value);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add array values definition.
-     *
-     * @param array $items Array key-value pairs collection
-     *
-     * @return self Chaining
-     */
-    public function arrayValue(array $items = array())
-    {
-        if (sizeof($items)) {
-            $this->text('[');
-            $this->tabs++;
-
-            // Iterate array items
-            foreach ($items as $key => $value) {
-                // Start array key definition
-                $this->newLine()->defineValue($key)->text(' => ')->defineValue($value)->text(',');
-            }
-
-            $this->tabs--;
-            $this->newLine(']');
-        } else {
-            $this->text('[]');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add string value definition.
-     *
-     * @param string $value String value to add
-     * @param string $tabs  Tabs count
-     * @param string $quote Type of quote
-     *
-     * @return self Chaining
-     */
-    public function stringValue($value, $tabs = null, $quote = self::QUOTE_SINGLE)
-    {
-        return $this->tabs($quote . $value . $quote, $tabs);
     }
 }
 //[PHPCOMPRESSOR(remove,end)]
