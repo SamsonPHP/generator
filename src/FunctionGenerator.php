@@ -26,10 +26,10 @@ class FunctionGenerator extends AbstractGenerator
     /**
      * FunctionGenerator constructor.
      *
-     * @param GenericGenerator $parent Parent Generator
-     * @param string           $name Function name
+     * @param string            $name   Function name
+     * @param AbstractGenerator $parent Parent Generator
      */
-    public function __construct(string $name, GenericGenerator $parent = null)
+    public function __construct(string $name, AbstractGenerator $parent = null)
     {
         $this->name = $name;
 
@@ -96,6 +96,7 @@ class FunctionGenerator extends AbstractGenerator
      */
     public function defComment() : CommentsGenerator
     {
-        return new FunctionCommentsGenerator($this->arguments, $this->argumentDescriptions, $this);
+        return (new FunctionCommentsGenerator($this->arguments, $this->argumentDescriptions, $this))
+            ->setIndentation($this->indentation);
     }
 }

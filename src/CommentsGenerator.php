@@ -75,7 +75,7 @@ class CommentsGenerator extends AbstractGenerator
      */
     public function code(int $indentation = 0) : string
     {
-        $indentationString = $this->indentation($indentation);
+        $indentationString = $this->indentation($this->indentation);
 
         return count($this->code) === 1
             ? $this->formatSingleLine($indentationString)

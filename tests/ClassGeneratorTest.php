@@ -269,5 +269,49 @@ PHP;
         static::assertEquals($expected, $generated);
     }
 
+    public function testDefMethod()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defMethod('testMethod')->end()
+            ->code();
 
+        $expected = <<<'PHP'
+namespace testname\space;
+
+class testClass
+{
+    public function testMethod()
+    {
+    }
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
+
+    public function testDefMethodWithArguments()
+    {
+        $generated = $this->classGenerator
+            ->defNamespace('testname\space')
+            ->defMethod('testMethod')
+            ->defArgument('testArgument', 'TestType', 'Test description')
+            ->defComment()->end()
+            ->end()
+            ->code();
+
+        $expected = <<<'PHP'
+namespace testname\space;
+
+class testClass
+{
+    /** @param TestType $testArgument Test description */
+    public function testMethod(TestType $testArgument)
+    {
+    }
+}
+PHP;
+
+        static::assertEquals($expected, $generated);
+    }
 }

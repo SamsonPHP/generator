@@ -34,11 +34,13 @@ abstract class AbstractGenerator
     /**
      * Decrease indentation.
      *
+     * @param int $indentation
+     *
      * @return $this
      */
-    public function decreaseIndentation() : AbstractGenerator
+    public function setIndentation(int $indentation) : AbstractGenerator
     {
-        $this->indentation--;
+        $this->indentation = $indentation;
 
         return $this;
     }

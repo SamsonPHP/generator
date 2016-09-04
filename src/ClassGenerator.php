@@ -195,7 +195,7 @@ class ClassGenerator extends AbstractGenerator
      */
     public function defMethod(string $name) : MethodGenerator
     {
-        return new MethodGenerator($name, $this);
+        return (new MethodGenerator($name, $this))->increaseIndentation();
     }
 
     /**
@@ -263,7 +263,12 @@ class ClassGenerator extends AbstractGenerator
 
         // Add properties
         if (array_key_exists(PropertyGenerator::class, $this->generatedCode)) {
-            $formattedCode[] = $this->indentation($indentation + 1) . $this->generatedCode[PropertyGenerator::class];
+            $formattedCode[] = $this->indentation(1) . $this->generatedCode[PropertyGenerator::class];
+        }
+
+        // Add properties
+        if (array_key_exists(MethodGenerator::class, $this->generatedCode)) {
+            $formattedCode[] = $this->generatedCode[MethodGenerator::class];
         }
 
         $formattedCode[] = '}';
